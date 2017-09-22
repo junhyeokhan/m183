@@ -78,6 +78,8 @@ namespace _2FactorLogin.Controllers
                 return View(model);
             }
 
+            //TESTTTESTTEST
+
             // Anmeldefehler werden bezüglich einer Kontosperre nicht gezählt.
             // Wenn Sie aktivieren möchten, dass Kennwortfehler eine Sperre auslösen, ändern Sie in "shouldLockout: true".
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
