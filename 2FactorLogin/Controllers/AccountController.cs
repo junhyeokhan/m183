@@ -14,6 +14,9 @@ using System.Text;
 using System.Net;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
+using OtpNet;
+using QRCoder;
+using System.Drawing;
 
 namespace _2FactorLogin.Controllers
 {
@@ -78,20 +81,30 @@ namespace _2FactorLogin.Controllers
                 return View(model);
             }
 
-            //TESTTTESTTEST
-
             // Anmeldefehler werden bezüglich einer Kontosperre nicht gezählt.
             // Wenn Sie aktivieren möchten, dass Kennwortfehler eine Sperre auslösen, ändern Sie in "shouldLockout: true".
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    string otpKey = DateTime.Now.Ticks.ToString();
-                    //Send per API
-                    new NexmoAPIHelper().SendSMS("41768140413", otpKey);
+                    //OTP
+                    //string otpKey = DateTime.Now.Ticks.ToString();
+                    ////Send per API
+                    //new NexmoAPIHelper().SendSMS("41768140413", otpKey);
 
+                    //TOTP
+                    string myString = "JunhyeokHan";
+                    byte[] secretKey = Encoding.ASCII.GetBytes(myString);
+                    var topt = new Totp(secretKey, step: 15);
+                    var totpCode = topt.ComputeTotp(DateTime.UtcNow);
 
-                    return RedirectToLocal(returnUrl);
+                    //QR Code
+                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                    QRCodeData qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
+                    QRCode qrCode = new QRCode(qrCodeData);
+                    Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+                    return RedirectToAction("TOTP", "Account", new { account = model, totpCode = totpCode, qrCodeImage = qrCodeImage });
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -101,6 +114,11 @@ namespace _2FactorLogin.Controllers
                     ModelState.AddModelError("", "Ungültiger Anmeldeversuch.");
                     return View(model);
             }
+        }
+
+        public ActionResult TOTP(LoginViewModel account, string totpCode, Bitmap qrCodeImage)
+        { 
+        
         }
 
         //
