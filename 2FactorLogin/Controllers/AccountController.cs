@@ -80,9 +80,6 @@ namespace _2FactorLogin.Controllers
             {
                 return View(model);
             }
-
-            // Anmeldefehler werden bezüglich einer Kontosperre nicht gezählt.
-            // Wenn Sie aktivieren möchten, dass Kennwortfehler eine Sperre auslösen, ändern Sie in "shouldLockout: true".
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
@@ -95,8 +92,8 @@ namespace _2FactorLogin.Controllers
                     //TOTP
                     string myString = "JunhyeokHan";
                     byte[] secretKey = Encoding.ASCII.GetBytes(myString);
-                    var topt = new Totp(secretKey, step: 15);
-                    var totpCode = topt.ComputeTotp(DateTime.UtcNow);
+                    var totp = new Totp(secretKey, step: 15);
+                    var totpCode = totp.ComputeTotp(DateTime.UtcNow);
 
 
                     return RedirectToAction("TOTP", "Account", new { account = model, totpCode = totpCode });
@@ -120,7 +117,7 @@ namespace _2FactorLogin.Controllers
         {
             //QR Code
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(code, QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(20);
 

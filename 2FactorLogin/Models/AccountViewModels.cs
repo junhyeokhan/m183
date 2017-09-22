@@ -55,10 +55,10 @@ namespace _2FactorLogin.Models
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Kennwort")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Speichern?")]
+        [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
     }
 
