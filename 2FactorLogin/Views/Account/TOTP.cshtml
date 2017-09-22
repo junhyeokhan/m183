@@ -1,0 +1,9 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "TOTP";
+}
+
+<h2>TOTP</h2>
+
+<img src="@Url.Action("QrCode", new { code = Model })" alt="qr code" />

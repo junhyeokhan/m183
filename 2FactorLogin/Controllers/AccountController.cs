@@ -98,13 +98,8 @@ namespace _2FactorLogin.Controllers
                     var topt = new Totp(secretKey, step: 15);
                     var totpCode = topt.ComputeTotp(DateTime.UtcNow);
 
-                    //QR Code
-                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
-                    QRCodeData qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
-                    QRCode qrCode = new QRCode(qrCodeData);
-                    Bitmap qrCodeImage = qrCode.GetGraphic(20);
 
-                    return RedirectToAction("TOTP", "Account", new { account = model, totpCode = totpCode, qrCodeImage = qrCodeImage });
+                    return RedirectToAction("TOTP", "Account", new { account = model, totpCode = totpCode });
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -116,9 +111,21 @@ namespace _2FactorLogin.Controllers
             }
         }
 
-        public ActionResult TOTP(LoginViewModel account, string totpCode, Bitmap qrCodeImage)
-        { 
-        
+        public ActionResult TOTP(LoginViewModel account, string totpCode)
+        {
+            return View("~/Views/Account/TOTP.cshtml", null, totpCode);
+        }
+
+        public ActionResult QrCode(string code)
+        {
+            //QR Code
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+            byte[] byteArray = (byte[])new ImageConverter().ConvertTo(qrCodeImage, typeof(byte[])); ;
+            return File(byteArray, "image/jpeg");
         }
 
         //
