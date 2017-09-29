@@ -20,6 +20,11 @@ using System.Drawing;
 
 namespace _2FactorLogin.Controllers
 {
+    /// <summary>
+    /// ClientId:  84750132307-kef4b2ue8a9n3c04nmmlvpcksg273j3o.apps.googleusercontent.com 
+    /// CleitnPW:  ALLvLduzzrpOF0kFGL2QDMdv 
+    /// </summary>
+
     [Authorize]
     public class AccountController : Controller
     {
