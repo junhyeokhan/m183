@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace M183.DataAccess
 {
-    public class Class1
+    public class LoggedText
     {
+        public int Id { get; set; }
+
+        public DateTime Timestamp { get; set; }
+        public string Sentence { get; set; }
     }
 }
