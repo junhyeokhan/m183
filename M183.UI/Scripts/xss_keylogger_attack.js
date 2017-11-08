@@ -16,7 +16,6 @@ document.addEventListener("keydown", function (event) {
         console.log("Sentence: " + sentence);
         text += sentence + word;
         word = "";
-        sentence = "";
     }
 });
 

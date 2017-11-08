@@ -96,10 +96,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Css\main.css" />
-    <Content Include="Css\normalize.css" />
+    <Content Include="Css\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Site.js" />
+    <Content Include="Scripts\ui_redress_attack.js" />
     <Content Include="Scripts\xss_fakelogin_attack.js" />
     <Content Include="Scripts\xss_keylogger_attack.js" />
     <Content Include="Web.config" />
@@ -107,7 +107,13 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\APIController.cs" />
+    <Compile Include="Controllers\CredentialsLoggingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KeyLoggingController.cs" />
+    <Compile Include="Controllers\UIRedressController.cs" />
+    <Compile Include="Extensions\HtmlExtensions.cs" />
+    <Compile Include="Extensions\RequestExtensions.cs" />
+    <Compile Include="Extensions\UrlExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -119,6 +125,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\KeyLogging\Index.cshtml" />
+    <Content Include="Views\CredentialsLogging\Index.cshtml" />
+    <Content Include="Views\UIRedress\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

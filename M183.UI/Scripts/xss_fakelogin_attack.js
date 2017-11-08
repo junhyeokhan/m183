@@ -8,15 +8,17 @@ var input_username = document.createElement("input");
 input_username.setAttribute("name", "username");
 input_username.setAttribute("type", "text");
 input_username.setAttribute("id", "username");
+input_username.setAttribute("placeholder", "username");
 
 var input_password = document.createElement("input");
 input_password.setAttribute("name", "password");
 input_password.setAttribute("type", "password");
 input_password.setAttribute("id", "password");
+input_password.setAttribute("placeholder", "password");
 
 var input_submit_button = document.createElement("input");
 input_submit_button.setAttribute("name", "submit");
-input_submit_button.setAttribute("value", "log in");
+input_submit_button.setAttribute("value", "Log in");
 input_submit_button.setAttribute("type", "submit");
 
 form.appendChild(input_username);
@@ -26,7 +28,7 @@ form.appendChild(document.createElement("br"));
 form.appendChild(document.createElement("br"));
 form.appendChild(input_submit_button);
 
-document.getElementsByTagName('body')[0].appendChild(form);
+document.getElementsByClassName('form-container')[0].appendChild(form);
 
 form.addEventListener("submit", function (event) {
     event.preventDefault();

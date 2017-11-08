@@ -1,0 +1,30 @@
+﻿@model List<LoggedAccountViewModel>
+@{ 
+    ViewBag.Title = "Credentials Logging";
+}
+<h1>Credentials Logging</h1>
+<p>Type any credentials and press [Log in] button. Credentials are saved into the database. Reload the page to see logged credentials.</p>
+<div class="form-container"></div>
+<h2>List of credentials</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Username</th>
+            <th>Password</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (LoggedAccountViewModel text in Model)
+        {
+            <tr>
+                <td>@text.Timestamp.ToShortDateString()</td>
+                <td>@text.Username</td>
+                <td>@text.Password</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.ActionLink("Clear", "Clear", "KeyLogging", new { @class = "button" })
+<script src="~/Scripts/xss_fakelogin_attack.js"></script>
