@@ -1,5 +1,6 @@
 namespace M183.DataAccess
 {
+    using M183.DataAccess.Models;
     using System;
     using System.Data.Entity;
     using System.Linq;
@@ -14,5 +15,9 @@ namespace M183.DataAccess
         
         public virtual DbSet<LoggedText> LoggedText { get; set; }
         public virtual DbSet<LoggedAccount> LoggedAccount { get; set; }
+        public virtual DbSet<Document> Document { get; set; }
+        public virtual DbSet<Permission> Permission { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<User> User { get; set; }
     }
 }
