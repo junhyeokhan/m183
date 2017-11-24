@@ -138,6 +138,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <Content Include="Areas\User\Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Home\Feedback.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

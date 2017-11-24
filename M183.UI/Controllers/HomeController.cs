@@ -1,4 +1,6 @@
-﻿using M183.BusinessLogic.Security;
+﻿using M183.BusinessLogic;
+using M183.BusinessLogic.Security;
+using M183.BusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,11 @@ namespace M183.UI.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+            return View();
+        }
+
+        public ActionResult Feedback()
+        {
             return View();
         }
     }

@@ -52,6 +52,7 @@
     <Compile Include="Security\BusinessRole.cs" />
     <Compile Include="Security\BusinessUser.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
+    <Compile Include="ViewModels\FeedbackViewModel.cs" />
     <Compile Include="ViewModels\LoggedAccountViewModel.cs" />
     <Compile Include="ViewModels\LoggedTextViewModel.cs" />
   </ItemGroup>

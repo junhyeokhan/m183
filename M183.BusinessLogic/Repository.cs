@@ -12,6 +12,11 @@ namespace M183.BusinessLogic
     {
         private static DatabaseContext db = new DatabaseContext();
 
+        public AccountViewModel GetUser(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<LoggedTextViewModel> GetAllKeyLogs()
         {
             return db.LoggedText
