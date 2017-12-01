@@ -115,6 +115,7 @@
     <Compile Include="Controllers\CredentialsLoggingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KeyLoggingController.cs" />
+    <Compile Include="Controllers\TutorialController.cs" />
     <Compile Include="Controllers\UIRedressController.cs" />
     <Compile Include="Extensions\HtmlExtensions.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
@@ -139,6 +140,8 @@
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <Content Include="Areas\User\Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
+    <Content Include="Views\Tutorial\VigenereEncryption.cshtml" />
+    <Content Include="Views\Tutorial\CesarEncryption.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
