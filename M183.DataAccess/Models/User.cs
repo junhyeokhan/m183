@@ -1,4 +1,5 @@
-﻿using System;
+﻿using M183.DataAccess.Models.Configurations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace M183.DataAccess.Models
         public string Password { get; set; }
 
         public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<Configuration> Configurations { get; set; }
         public virtual ICollection<PersonalDocument> PersonalDocuments { get; set; }
     }
 }

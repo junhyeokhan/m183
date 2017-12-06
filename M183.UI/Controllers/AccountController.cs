@@ -1,10 +1,7 @@
-﻿using M183.BusinessLogic.Security;
+﻿using System.Web.Mvc;
+using M183.BusinessLogic.Managers;
+using M183.BusinessLogic.Security;
 using M183.BusinessLogic.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 namespace M183.UI.Controllers
 {
@@ -23,27 +20,28 @@ namespace M183.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(AccountViewModel accountViewModel)
+        public ActionResult Login(UserViewModel userViewModel)
         {
-            if (accountViewModel.Username == "admin" && accountViewModel.Password == "test")
+            //Try Login
+            new SecurityManager().TryLogin(userViewModel);
+
+            //Login succeeded
+            if (BusinessUser.Current.Id > 0)
             {
-                BusinessUser.Current.Username = accountViewModel.Username;
-                BusinessUser.Current.Username = accountViewModel.Password;
-                BusinessUser.Current.Roles.Add(new BusinessRole() { Name = "Admin" });
-                return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+                if (BusinessUser.Current.Roles.Contains(BusinessRole.Admin))
+                {
+                    return RedirectToAction("Index", "Dashboard", new { area = "admin" });
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Dashboard", new { area = "user" });
+                }
             }
-            else if (accountViewModel.Username == "user" && accountViewModel.Password == "test")
-            {
-                BusinessUser.Current.Username = accountViewModel.Username;
-                BusinessUser.Current.Username = accountViewModel.Password;
-                BusinessUser.Current.Roles.Add(new BusinessRole() { Name = "User" });
-                return RedirectToAction("Index", "Dashboard", new { area = "User" });
-            }
-            else
-            {
-                ModelState.AddModelError("Login", "Wrogn credentials are entered.");
-            }
-            return View();
+
+            //Login failed
+            ModelState.AddModelError("Login", "Login has failed. Please retry.");
+
+            return View(userViewModel);
         }
     }
 }

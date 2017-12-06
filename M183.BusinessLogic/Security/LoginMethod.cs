@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace M183.BusinessLogic.Security
+namespace M183.BusinessLogic.Models
 {
-    public enum BusinessRole
+    public enum LoginMethod
     {
-        Default = 0,
-        Admin = 1,
+       Default = 0,
+       OTP = 1,
+       TOTP = 2,
+
     }
 }

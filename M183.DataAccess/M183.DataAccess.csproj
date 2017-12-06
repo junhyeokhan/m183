@@ -51,6 +51,8 @@
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="LoggedAccount.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Configurations\Configuration.cs" />
+    <Compile Include="Models\Configurations\LoginConfiguration.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\PersonalDocument.cs" />
