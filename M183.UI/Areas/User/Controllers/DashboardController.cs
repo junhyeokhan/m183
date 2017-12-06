@@ -12,10 +12,6 @@ namespace M183.UI.Areas.User.Controllers
         // GET: User/Dashboard
         public ActionResult Index()
         {
-            if (!BusinessUser.Current.Roles.Any(r => r.Name == "User"))
-            {
-                return RedirectToAction("Login", "Account", new { area = "" });
-            }
             return View();
         }
     }

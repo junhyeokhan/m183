@@ -10,7 +10,7 @@ namespace M183.DataAccess.Models
     {
         public int Id { get; set; }
 
-        public int Role { get; set; }
+        public int RoleType { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
         public virtual ICollection<Permission> Permissions { get; set; }

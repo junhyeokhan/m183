@@ -13,7 +13,7 @@ namespace M183.UI.Areas.Admin.Controllers
         // GET: Admin/Dashboard
         public ActionResult Index()
         {
-            if (!BusinessUser.Current.Roles.Any(r => r.Name == "Admin"))
+            if (!BusinessUser.Current.Roles.Contains(BusinessRole.Admin))
             {
                 return RedirectToAction("Login", "Account", new { area = "" });
             }

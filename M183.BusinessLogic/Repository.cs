@@ -1,5 +1,6 @@
 ﻿using M183.BusinessLogic.ViewModels;
 using M183.DataAccess;
+using M183.DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,6 @@ namespace M183.BusinessLogic
     public class Repository
     {
         private static DatabaseContext db = new DatabaseContext();
-
-        public AccountViewModel GetUser(string username, string password)
-        {
-            throw new NotImplementedException();
-        }
 
         public List<LoggedTextViewModel> GetAllKeyLogs()
         {

@@ -23,7 +23,7 @@ namespace M183.UI.Controllers
         public ActionResult Login(UserViewModel userViewModel)
         {
             //Try Login
-            new SecurityManager().TryLogin(userViewModel);
+            new UserManager().TryLogin(userViewModel);
 
             //Login succeeded
             if (BusinessUser.Current.Id > 0)
@@ -42,6 +42,28 @@ namespace M183.UI.Controllers
             ModelState.AddModelError("Login", "Login has failed. Please retry.");
 
             return View(userViewModel);
+        }
+
+        [HttpGet]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Register(UserViewModel userViewModel)
+        {
+            //TODO: Add validation (e.g. Password rule)
+
+            //Try registering.
+            if (new UserManager().TryRegister(userViewModel))
+            {
+                //Registration succeeded.
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
+            //Registration failed.
+            return View();
         }
     }
 }
