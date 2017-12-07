@@ -86,9 +86,9 @@ namespace _2FactorLogin.Controllers
             {
                 case SignInStatus.Success:
                     //OTP
-                    //string otpKey = DateTime.Now.Ticks.ToString();
+                    string otpKey = DateTime.Now.Ticks.ToString();
                     ////Send per API
-                    //new NexmoAPIHelper().SendSMS("41768140413", otpKey);
+                    new NexmoAPIHelper().SendSMS("41768140413", otpKey);
 
                     //TOTP
                     string myString = "JunhyeokHan";

@@ -8,6 +8,8 @@ using M183.DataAccess.Models;
 using M183.DataAccess.Models.Configurations;
 using M183.BusinessLogic.Models;
 using M183.BusinessLogic.Security;
+using OtpNet;
+using M183.BusinessLogic.Models.Nexmo;
 
 namespace M183.BusinessLogic.Managers
 {
@@ -92,6 +94,20 @@ namespace M183.BusinessLogic.Managers
                 }
             }
             return result;
+        }
+
+        public void OTP()
+        {
+            string otpKey = DateTime.Now.Ticks.ToString();
+            new NexmoAPIHelper().SendSMS("41768140413", otpKey);
+        }
+
+        public void TOTP()
+        {
+            string myString = "JunhyeokHan";
+            byte[] secretKey = Encoding.ASCII.GetBytes(myString);
+            var totp = new Totp(secretKey, step: 15);
+            var totpCode = totp.ComputeTotp(DateTime.UtcNow);
         }
     }
 }
