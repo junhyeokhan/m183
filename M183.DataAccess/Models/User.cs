@@ -15,7 +15,7 @@ namespace M183.DataAccess.Models
         public string Password { get; set; }
 
         public virtual ICollection<Role> Roles { get; set; }
-        public virtual ICollection<Configuration> Configurations { get; set; }
+        public virtual ICollection<UserConfiguration> Configurations { get; set; }
         public virtual ICollection<PersonalDocument> PersonalDocuments { get; set; }
     }
 }

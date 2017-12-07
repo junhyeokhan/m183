@@ -14,13 +14,13 @@ namespace M183.UI.Controllers
         [HttpPost]
         public void CollectKeyLogging(string sentence)
         {
-            repository.SaveKeyLog(sentence);
+            //repository.SaveKeyLog(sentence);
         }
 
         [HttpPost]
         public void CollectUsernamePassword(string username, string password)
         {
-            repository.SaveAccountLog(username, password);
+            //repository.SaveAccountLog(username, password);
         }
     }
 }

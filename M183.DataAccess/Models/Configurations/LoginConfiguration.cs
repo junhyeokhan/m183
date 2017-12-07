@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace M183.DataAccess.Models.Configurations
 {
-    public class LoginConfiguration : Configuration
+    [Table("LoginConfigurations")]
+    public class LoginConfiguration : UserConfiguration
     {
         public int LoginMethod { get; set; }
     }

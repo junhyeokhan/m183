@@ -14,13 +14,13 @@ namespace M183.UI.Controllers
 
         public ActionResult Index()
         {
-            List<LoggedAccountViewModel> accounts = repository.GetAllAccounts();
+            List<LoggedAccountViewModel> accounts = /*repository.GetAllAccounts()*/null;
             return View(accounts);
         }
 
         public ActionResult Clear()
         {
-            repository.ClearAllAccounts();
+            //repository.ClearAllAccounts();
             return RedirectToAction("Index");
         }
     }

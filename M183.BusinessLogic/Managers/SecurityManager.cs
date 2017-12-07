@@ -17,7 +17,7 @@ namespace M183.BusinessLogic.Managers
     {
         public void TryLogin(UserViewModel accountViewModel)
         {
-            User user = db.User
+            User user = db.Users
                     .Where(u => u.Email == accountViewModel.Email &&
                         u.Password == accountViewModel.Password) //TODO: Hash password!
                     .FirstOrDefault();
@@ -65,7 +65,7 @@ namespace M183.BusinessLogic.Managers
             bool result = false;
             
             //Check if any user has same email address
-            User user = db.User.Where(u => u.Email == userViewModel.Email).FirstOrDefault();
+            User user = db.Users.Where(u => u.Email == userViewModel.Email).FirstOrDefault();
 
             //No user with same email address is found.
             if (user == null)
@@ -77,10 +77,10 @@ namespace M183.BusinessLogic.Managers
                     {
                         Email = userViewModel.Email,
                         Password = userViewModel.Password,
-                        Roles = db.Role.Where(r => r.RoleType == (int)BusinessRole.Default).ToList(),
+                        Roles = db.Roles.Where(r => r.RoleType == (int)BusinessRole.Default).ToList(),
                     };
                     //Save new user into the database.
-                    db.User.Add(user);
+                    db.Users.Add(user);
                     db.SaveChanges();
                     result = true;
                 }

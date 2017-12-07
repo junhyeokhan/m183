@@ -14,13 +14,13 @@ namespace M183.UI.Controllers
 
         public ActionResult Index()
         {
-            List<LoggedTextViewModel> logs = repository.GetAllKeyLogs();
+            List<LoggedTextViewModel> logs = /*repository.GetAllKeyLogs()*/ null;
             return View(logs);
         }
 
         public ActionResult Clear()
         {
-            repository.ClearAllKeyLogs();
+            //repository.ClearAllKeyLogs();
             return RedirectToAction("Index");
         }
     }

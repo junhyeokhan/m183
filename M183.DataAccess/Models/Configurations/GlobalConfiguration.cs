@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace M183.DataAccess.Models.Configurations
 {
-    public class Configuration
+    public class GlobalConfiguration
     {
         public int Id { get; set; }
 
-        public User User { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
     }
 }
