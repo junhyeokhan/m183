@@ -23,5 +23,10 @@ namespace M183.UI.Controllers
         {
             return View();
         }
+
+        public ActionResult OneTimePad()
+        {
+            return View();
+        }
     }
 }
