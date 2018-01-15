@@ -3,7 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M183.UI", "M183.UI\M183.UI.csproj", "{87E3204A-21D6-4858-A2C5-F6E1C923D7D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M183.BusinessLogic", "M183.BusinessLogic\M183.BusinessLogic.csproj", "{34C278D7-A57F-449B-BA3B-8AF847EB9504}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M183.DataAccess", "M183.DataAccess\M183.DataAccess.csproj", "{041A85A0-6491-4C5E-9CD1-C0E6D1E87E26}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87E3204A-21D6-4858-A2C5-F6E1C923D7D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87E3204A-21D6-4858-A2C5-F6E1C923D7D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87E3204A-21D6-4858-A2C5-F6E1C923D7D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87E3204A-21D6-4858-A2C5-F6E1C923D7D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34C278D7-A57F-449B-BA3B-8AF847EB9504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34C278D7-A57F-449B-BA3B-8AF847EB9504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34C278D7-A57F-449B-BA3B-8AF847EB9504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34C278D7-A57F-449B-BA3B-8AF847EB9504}.Release|Any CPU.Build.0 = Release|Any CPU
+		{041A85A0-6491-4C5E-9CD1-C0E6D1E87E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{041A85A0-6491-4C5E-9CD1-C0E6D1E87E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{041A85A0-6491-4C5E-9CD1-C0E6D1E87E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{041A85A0-6491-4C5E-9CD1-C0E6D1E87E26}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
