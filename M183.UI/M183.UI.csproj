@@ -161,12 +161,6 @@
     <Folder Include="Models\" />
     <Folder Include="Views\API\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\M183.BusinessLogic\M183.BusinessLogic.csproj">
-      <Project>{D0792556-66A8-4219-A628-4D959215B169}</Project>
-      <Name>M183.BusinessLogic</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
