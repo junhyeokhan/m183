@@ -1,0 +1,25 @@
+﻿using System;
+using System.Web.Mvc;
+using System.Web.Mvc.Html;
+
+namespace M183.UI.Extensions
+{
+    /// <summary>
+    /// 
+    /// <see cref="http://geekswithblogs.net/bdiaz/archive/2010/04/09/handy-asp.net-mvc-2-extension-methods-ndash-where-am-i.aspx"/>
+    /// </summary>
+    public static class HtmlExtensions
+    {
+        public static MvcHtmlString ActionMenuItem(this HtmlHelper htmlHelper, String linkText, String actionName, String controllerName)
+        {
+            var tag = new TagBuilder("li");
+            if (htmlHelper.ViewContext.RequestContext.IsCurrentRoute(null, controllerName, actionName))
+            {
+                tag.AddCssClass("selected");
+            }
+            tag.InnerHtml = htmlHelper.ActionLink(linkText, actionName, controllerName).ToString();
+            return MvcHtmlString.Create(tag.ToString());
+        }
+
+    }
+}

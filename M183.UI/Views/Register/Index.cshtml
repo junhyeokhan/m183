@@ -1,8 +1,19 @@
 ﻿@model RegisterViewModel
 
-@using (Html.BeginForm())
-{
-    @Html.TextBoxFor(m => m.Username)
-    @Html.PasswordFor(m => m.Password)
-    <input type="submit" name="submit" value="Register" />
+@{ 
+    ViewBag.Title = "Register";
 }
+
+<h1>Register</h1>
+<div class="block long">
+    @using (Html.BeginForm("Index", "Register", null, FormMethod.Post, new { @class = "pure-form pure-form-stacked" }))
+    {
+        @Html.LabelFor(m => m.Username)
+        @Html.TextBoxFor(m => m.Username)
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password)
+        @Html.LabelFor(m => m.MobileNumber)
+        @Html.TextBoxFor(m => m.MobileNumber)
+        <input class="pure-button pure-button-primary" type="submit" name="submit" value="Register" />
+    }
+</div>

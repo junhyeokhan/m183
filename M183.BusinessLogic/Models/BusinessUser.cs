@@ -31,5 +31,10 @@ namespace M183.BusinessLogic.Models
         public int Id { get; set; }
         public string Username { get; set; }
         public string MobileNumber { get; set; }
+
+        public void Logout()
+        {
+            HttpContext.Current.Session["BusinessUser"] = null;
+        }
     }
 }

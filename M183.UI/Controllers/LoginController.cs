@@ -31,7 +31,7 @@ namespace M183.UI.Controllers
                 string secret = "d6b2d10b06f2a697";
                 string key = "5e4521b6";
                 string code = new Random().Next(999999).ToString();
-                string postData = string.Format("api_key={0}&api_secret={1}&to={2}&from=\"\"NEXMO\"\"&text=\"{3}\"", key, secret, BusinessUser.Current.MobileNumber, code);
+                string postData = string.Format("api_key={0}&api_secret={1}&to={2}&from=M183&text=Your code: {3}\n", key, secret, BusinessUser.Current.MobileNumber, code);
                 byte[] data = Encoding.ASCII.GetBytes(postData);
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
@@ -48,6 +48,13 @@ namespace M183.UI.Controllers
             ModelState.AddModelError("Login", "Login was not successful.");
 
             return View(loginViewModel);
+        }
+
+        public ActionResult Logout()
+        {
+            BusinessUser.Current.Logout();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

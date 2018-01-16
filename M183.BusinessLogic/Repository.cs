@@ -31,6 +31,7 @@ namespace M183.BusinessLogic
                 {
                     UserName = registerViewModel.Username,
                     Password = registerViewModel.Password,
+                    MobileNumber = registerViewModel.MobileNumber,
                 };
                 db.User.Add(user);
                 db.SaveChanges();

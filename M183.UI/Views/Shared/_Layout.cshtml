@@ -3,9 +3,10 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    
-    <link type="text/css" rel="stylesheet" href="~/Contents/Styles/Site.css" />
-    
+
+    <link rel="stylesheet" href="~/Contents/Styles/Site.css" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" type="text/css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+
     <title>M183 @(string.IsNullOrEmpty(ViewBag.Title) ? "" : " - " + ViewBag.Title)</title>
 </head>
 <body>
@@ -13,6 +14,22 @@
         <h1>
             M183
         </h1>
+    </div>
+    <div class="navigation">
+        <ul>
+            @Html.ActionMenuItem("Home", "Index", "Home")
+
+            @if (BusinessUser.Current.Id > 0)
+            {
+                @Html.ActionMenuItem("Logout", "Logout", "Login")
+            }
+            else
+            {
+
+                @Html.ActionMenuItem("Login", "Index", "Login")
+                @Html.ActionMenuItem("Register", "Index", "Register")
+            }
+        </ul>
     </div>
     <div class="content">
         @RenderBody()
