@@ -6,7 +6,7 @@
 
 <h1>Login</h1>
 <div class="block long">
-    @using (Html.BeginForm("Index", "Login", null, FormMethod.Post, new { @class = "pure-form pure-form-stacked" }))
+    @using (Html.BeginForm("Login", "Login", null, FormMethod.Post, new { @class = "pure-form pure-form-stacked" }))
     {
         @Html.LabelFor(m => m.Username)
         @Html.TextBoxFor(m => m.Username)

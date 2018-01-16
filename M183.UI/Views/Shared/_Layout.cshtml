@@ -19,7 +19,7 @@
         <ul>
             @Html.ActionMenuItem("Home", "Index", "Home")
 
-            @if (BusinessUser.Current.Id > 0)
+            @if (BusinessUser.Current.IsAuthenticated)
             {
                 @Html.ActionMenuItem("Logout", "Logout", "Login")
             }

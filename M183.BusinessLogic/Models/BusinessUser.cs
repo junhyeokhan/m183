@@ -28,9 +28,21 @@ namespace M183.BusinessLogic.Models
             }
         }
 
+
+
         public int Id { get; set; }
         public string Username { get; set; }
         public string MobileNumber { get; set; }
+        public AuthenticationMethod AuthenticationMethod { get; set; }
+        public bool IsVerified { get; set; }
+
+        public bool IsAuthenticated
+        {
+            get
+            {
+                return Id > 0 && IsVerified;
+            }
+        }
 
         public void Logout()
         {
