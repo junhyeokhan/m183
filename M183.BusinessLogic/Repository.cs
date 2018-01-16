@@ -85,22 +85,36 @@ namespace M183.BusinessLogic
 
         }
 
-        public void VerifyToken(int id, string code)
+        public void VerifyToken(int userId, string code)
         {
-            // Get the last non-expired token
-            Token token = db.Token
-                    .Where(t => t.Expiry >= DateTime.Now)
-                    .OrderByDescending(t => t.Expiry)
-                    .FirstOrDefault();
+            User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
 
-            // Is there any token as queried?
-            if (token != null)
+            if (user != null)
             {
-                // Does the token have same code as submitted code?
-                if (token.TokenString == code)
+                // Get the last non-expired token
+                Token token = user.Tokens
+                        .Where(t => t.Expiry >= DateTime.Now && !t.Deleted)
+                        .OrderByDescending(t => t.Expiry)
+                        .FirstOrDefault();
+
+                // Is there any token as queried?
+                if (token != null)
                 {
-                    // Mark current user (session) as verified.
-                    BusinessUser.Current.IsVerified = true;
+                    // Does the token have same code as submitted code?
+                    if (token.TokenString == code)
+                    {
+                        // Mark current user (session) as verified
+                        BusinessUser.Current.IsVerified = true;
+
+                        // Delete used token
+                        token.Deleted = true;
+
+                        // Add user log
+                        UserLog userLog = new UserLog() { User = user, Action = (int)UserActionType.LoggedIn, Timestamp = DateTime.Now };
+                        db.UserLog.Add(userLog);
+
+                        db.SaveChanges();
+                    }
                 }
             }
         }

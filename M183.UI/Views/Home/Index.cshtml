@@ -2,7 +2,30 @@
 
 <h1>Home</h1>
 <div class="block long">
-    <p>This is a web application for module 183.</p>
-    @Html.ActionLink("Login", "Index", "Login", null, new { @class = "pure-button" })
-    @Html.ActionLink("Register", "Index", "Register", null, new { @class = "pure-button pure-button-primary" })
+    @if (!BusinessUser.Current.IsAuthenticated)
+    {
+        <p>This is a web application for module 183.</p>
+        @Html.ActionLink("Login", "Index", "Login", null, new { @class = "pure-button" })
+        @Html.ActionLink("Register", "Index", "Register", null, new { @class = "pure-button pure-button-primary" })
+    }
+    else
+    {
+        <p>
+            <span>Good</span>
+            @if (DateTime.Now.Hour >= 6 && DateTime.Now.Hour < 12)
+            {
+                <span>morning</span>
+            }
+            else if (DateTime.Now.Hour >= 12 && DateTime.Now.Hour < 18)
+            {
+                <span>afternoon</span>
+            }
+            else
+            {
+
+                <span>evening</span>
+            }
+            <span>@BusinessUser.Current.Username!</span>
+        </p>
+    }
 </div>

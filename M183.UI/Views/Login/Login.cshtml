@@ -8,6 +8,10 @@
 <div class="block long">
     @using (Html.BeginForm("VerifyCode", "Login", null, FormMethod.Post, new { @class = "pure-form pure-form-stacked" }))
     {
+        //TODO: Not necessary and not secure
+        @Html.HiddenFor(m => m.Username)
+        @Html.HiddenFor(m => m.Password)
+
         @Html.LabelFor(m => m.Token)
         @Html.TextBoxFor(m => m.Token)
         <input class="pure-button pure-button-primary" type="submit" name="submit" value="Login" />

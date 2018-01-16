@@ -9,8 +9,8 @@ namespace M183.DataAccess
     public class UserLog
     {
         public int Id { get; set; }
-
-        //TODO: Decision on data type
+        
+        public DateTime Timestamp { get; set; }
         public int Action { get; set; }
 
         public virtual User User { get; set; }
