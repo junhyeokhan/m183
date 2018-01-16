@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Comment.cs" />
     <Compile Include="DatabaseContext.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Post.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="User.cs" />
@@ -59,15 +60,6 @@
     <Compile Include="UserLogin.cs" />
     <Compile Include="UserRole.cs" />
     <Compile Include="UserStatus.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Database.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Database_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>Database.mdf</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

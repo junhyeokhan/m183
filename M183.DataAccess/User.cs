@@ -13,6 +13,9 @@ namespace M183.DataAccess
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MobileNumber { get; set; }
+        //TODO: Save username as hash
+        public string UserName { get; set; }
+        //TODO: Save password as hash
         public string Password { get; set; }
 
         public virtual ICollection<Token> Tokens { get; set; }

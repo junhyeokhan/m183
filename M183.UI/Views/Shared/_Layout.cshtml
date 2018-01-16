@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    
+    <link type="text/css" rel="stylesheet" href="~/Contents/Styles/Site.css" />
+    
+    <title>M183 @(string.IsNullOrEmpty(ViewBag.Title) ? "" : " - " + ViewBag.Title)</title>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            M183
+        </h1>
+    </div>
+    <div class="content">
+        @RenderBody()
+    </div>
+    <div class="footer">
+        Copyright ⓒ @DateTime.Now.Year Junhyeok Han, GIBZ. All rights reserved.
+    </div>
+</body>
+</html>

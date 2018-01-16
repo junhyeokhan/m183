@@ -9,8 +9,11 @@ namespace M183.DataAccess
     {
         public DatabaseContext() : base("name=DatabaseContext")
         {
+            // Add static reference to Entity framwork
+            Type type = typeof(System.Data.Entity.SqlServer.SqlProviderServices);
         }
 
+        public virtual DbSet<User> User { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

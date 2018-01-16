@@ -1,0 +1,51 @@
+﻿/*
+    Colors:
+        Red:
+        Blue:
+        Green:
+        Yellow:
+        Orange:
+        Gray: 808080
+        Light gray: BFBFBF
+*/
+body {
+    background-color: #BFBFBF;
+    margin: 0 auto;
+}
+
+.header {
+    background-color: white;
+    margin: 0 auto;
+    width: 90%;
+    padding: 20px;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0px;
+}
+
+.content {
+    width: calc(90% + 40px);
+    margin: 0 auto;
+}
+
+.footer {
+    background-color: white;
+    margin: 0 auto;
+    width: 90%;
+    padding: 20px;
+    text-align: center;
+    font-size: 10px;
+}
+
+.block {
+    min-height: 300px;
+    padding: 20px;
+    background-color: white;
+    width: 50%;
+}
+
+.block.long {
+    width: calc(100% - 40px);
+}

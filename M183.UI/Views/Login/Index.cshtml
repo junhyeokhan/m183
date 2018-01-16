@@ -1,0 +1,8 @@
+﻿@model LoginViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.TextBoxFor(m => m.Username)
+    @Html.PasswordFor(m => m.Password)
+    <input type="submit" name="submit" value="Login"/>
+}
