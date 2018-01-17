@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace M183.BusinessLogic.ViewModels
 {
@@ -13,6 +10,8 @@ namespace M183.BusinessLogic.ViewModels
         public string Description { get; set; }
         //TODO: Decision on data type
         public string Content { get; set; }
+        [DisplayName("Publish")]
+        public bool IsPublished { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? EditedOn { get; set; }
         public DateTime? DeletedOn { get; set; }

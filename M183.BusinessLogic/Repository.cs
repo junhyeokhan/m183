@@ -47,6 +47,21 @@ namespace M183.BusinessLogic
             return message;
         }
 
+        public bool IsUserAuthorisedToPost(int userId, int postId)
+        {
+            bool isAuthorised = false;
+
+            User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
+            Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
+
+            if (user != null && post != null)
+            {
+                isAuthorised = user.Posts.Contains(post);
+            }
+
+            return isAuthorised;
+        }
+
         public bool TryLogIn(LoginViewModel loginViewModel)
         {
             bool isAuthenticated = false;
@@ -64,7 +79,7 @@ namespace M183.BusinessLogic
                 // Is last status blocked?
                 if (userStatus != null)
                 {
-                    BusinessUser.Current.IsBlocked = userStatus.Status == (int)Status.Blocked;
+                    BusinessUser.Current.IsBlocked = userStatus.Status == (int)UserStatusCode.Blocked;
                 }
                 else
                 {
@@ -73,7 +88,7 @@ namespace M183.BusinessLogic
                         CreatedOn = DateTime.Now,
                         DeletedOn = null,
                         ModifiedOn = null,
-                        Status = (int)Status.Default,
+                        Status = (int)UserStatusCode.Default,
                         User = user,
                     };
 
@@ -204,7 +219,7 @@ namespace M183.BusinessLogic
                     CreatedOn = DateTime.Now,
                     DeletedOn = null,
                     ModifiedOn = null,
-                    Status = (int)Status.Blocked,
+                    Status = (int)UserStatusCode.Blocked,
                     User = user,
                 };
 
@@ -219,9 +234,9 @@ namespace M183.BusinessLogic
         }
 
         #region Posts
-        public List<PostViewModel> GetAllPosts(string query)
+        public List<PostViewModel> GetAllPosts(string query, bool onlyPublished)
         {
-            return db.Posts
+            return db.Post
                     .OrderByDescending(p => p.CreatedOn)
                     .Select(p => new PostViewModel()
                     {
@@ -232,18 +247,22 @@ namespace M183.BusinessLogic
                         Description = p.Description,
                         EditedOn = p.EditedOn,
                         Title = p.Title,
+                        IsPublished = p.PostStatuses.OrderByDescending(ps => ps.Timestamp).FirstOrDefault().Status == (int)PostStatusCode.Published
                     })
                     .Where(p => string.IsNullOrEmpty(query) ?
                         true :
                         p.Title.ToLower().Contains(query.ToLower()) ||
                             p.Description.ToLower().Contains(query.ToLower()) ||
                             p.Content.ToLower().Contains(query.ToLower()))
+                    .Where(p => onlyPublished ?
+                        p.IsPublished :
+                        true)
                     .ToList();
         }
 
         public List<PostViewModel> GetPosts(int userId)
         {
-            return db.Posts
+            return db.Post
                     .Where(p => p.User.Id == userId && p.DeletedOn == null)
                     .Select(p => new PostViewModel()
                     {
@@ -265,7 +284,7 @@ namespace M183.BusinessLogic
             if (user != null)
             {
                 // Check if the post exists already
-                Post post = db.Posts.Where(p => p.Id == postViewModel.Id).FirstOrDefault();
+                Post post = db.Post.Where(p => p.Id == postViewModel.Id).FirstOrDefault();
 
                 // Is the post new one?
                 if (post == null)
@@ -281,8 +300,19 @@ namespace M183.BusinessLogic
                         Content = postViewModel.Content,
                         Description = postViewModel.Description,
                     };
+                    db.Post.Add(post);
 
-                    db.Posts.Add(post);
+                    // Add initial post status
+                    PostStatus postStatus = new PostStatus()
+                    {
+                        Post = post,
+                        Timestamp = DateTime.Now,
+                        Status = postViewModel.IsPublished ? 
+                            (int)PostStatusCode.Published :
+                            (int)PostStatusCode.Saved,
+                    };
+                    db.PostStatus.Add(postStatus);
+
                     db.SaveChanges();
                 }
                 // Is the post existing one?
@@ -294,7 +324,7 @@ namespace M183.BusinessLogic
         }
         public void DeletePost(int postId)
         {
-            Post post = db.Posts.Where(p => p.Id == postId).FirstOrDefault();
+            Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
 
             if (post != null)
             {

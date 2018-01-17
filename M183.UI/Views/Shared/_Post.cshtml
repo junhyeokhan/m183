@@ -9,7 +9,10 @@
         <p>Written on: @Model.CreatedOn</p>
         <p>@(Model.EditedOn == null ? "" : "Edited on:" + Model.EditedOn)</p>
 
-        @Html.ActionLink("Edit", "EditPost", "Post", new { area = "user" }, new { @class = "pure-button pure-button-primary" })
-        @Html.ActionLink("Delete", "DeletePost", "Post", new { area = "user", postId = Model.Id }, new { @class = "pure-button pure-button-error" })
+        @if (BusinessUser.Current.IsAuthorisedToPost(Model.Id))
+        {
+            @Html.ActionLink("Edit", "EditPost", "Post", new { area = "user" }, new { @class = "pure-button pure-button-primary" })
+            @Html.ActionLink("Delete", "DeletePost", "Post", new { area = "user", postId = Model.Id }, new { @class = "pure-button pure-button-error" })
+        }
     </div>
 }

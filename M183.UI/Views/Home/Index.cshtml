@@ -1,31 +1,19 @@
-﻿
+﻿@model List<PostViewModel>
 
-<h1>Home</h1>
-<div class="block long">
-    @if (!BusinessUser.Current.IsAuthenticated)
-    {
-        <p>This is a web application for module 183.</p>
-        @Html.ActionLink("Login", "Index", "Login", null, new { @class = "pure-button space-right" })
-        @Html.ActionLink("Register", "Index", "Register", null, new { @class = "pure-button pure-button-primary" })
-    }
-    else
-    {
-        <p>
-            <span>Good</span>
-            @if (DateTime.Now.Hour >= 6 && DateTime.Now.Hour < 12)
-            {
-                <span>morning</span>
-            }
-            else if (DateTime.Now.Hour >= 12 && DateTime.Now.Hour < 18)
-            {
-                <span>afternoon</span>
-            }
-            else
-            {
+<h1 class="title">
+    Home
+</h1>
 
-                <span>evening</span>
-            }
-            <span>@BusinessUser.Current.Username!</span>
-        </p>
+@if (Model.Count > 0)
+{
+    foreach (PostViewModel postViewModel in Model)
+    {
+        Html.RenderPartial("~/Views/Shared/_Post.cshtml", postViewModel);
     }
-</div>
+}
+else
+{
+    <div class="block long">
+        <p>There is no post yet in this site. Why don't you be the first one?</p>
+    </div>
+}

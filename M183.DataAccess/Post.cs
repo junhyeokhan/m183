@@ -19,6 +19,7 @@ namespace M183.DataAccess
         public DateTime? DeletedOn { get; set; }
 
         public virtual User User { get; set; }
+        public virtual ICollection<PostStatus> PostStatuses { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
     }
 }

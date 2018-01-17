@@ -53,6 +53,7 @@
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Post.cs" />
+    <Compile Include="PostStatus.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

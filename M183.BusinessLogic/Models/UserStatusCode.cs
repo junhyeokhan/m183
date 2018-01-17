@@ -1,6 +1,6 @@
 ﻿namespace M183.BusinessLogic.Models
 {
-    public enum Status
+    public enum UserStatusCode
     {
         Default = 0,
         Blocked = 1,

@@ -51,8 +51,9 @@
     <Compile Include="Models\AuthenticationMethod.cs" />
     <Compile Include="Models\BusinessUser.cs" />
     <Compile Include="Models\LogClass.cs" />
+    <Compile Include="Models\PostStatusCode.cs" />
     <Compile Include="Models\Role.cs" />
-    <Compile Include="Models\Status.cs" />
+    <Compile Include="Models\UserStatusCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />

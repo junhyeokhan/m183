@@ -1,5 +1,8 @@
 ﻿using System.Web.Mvc;
 using M183.BusinessLogic.Models;
+using M183.BusinessLogic.ViewModels;
+using System.Collections.Generic;
+using M183.BusinessLogic;
 
 namespace M183.UI.Controllers
 {
@@ -22,7 +25,7 @@ namespace M183.UI.Controllers
                 }
             }
             
-            return View();
+            return View(new Repository().GetAllPosts("", true));
         }
     }
 }

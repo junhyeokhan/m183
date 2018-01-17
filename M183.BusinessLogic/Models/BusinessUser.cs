@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Web;
 
 namespace M183.BusinessLogic.Models
 {
     public class BusinessUser
     {
+        private static Repository repository = new Repository();
+
         private BusinessUser()
         {
 
@@ -49,6 +47,11 @@ namespace M183.BusinessLogic.Models
         public bool HasRole(Role role)
         {
             return Roles.Contains(role);
+        }
+
+        public bool IsAuthorisedToPost(int postId)
+        {
+            return repository.IsUserAuthorisedToPost(Id, postId);
         }
 
         public void Logout()
