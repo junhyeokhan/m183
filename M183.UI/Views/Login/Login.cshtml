@@ -8,6 +8,8 @@
 <div class="block long">
     @using (Html.BeginForm("VerifyCode", "Login", null, FormMethod.Post, new { @class = "pure-form pure-form-stacked" }))
     {
+        @Html.ValidationSummary()
+
         //TODO: Not necessary and not secure
         @Html.HiddenFor(m => m.Username)
         @Html.HiddenFor(m => m.Password)

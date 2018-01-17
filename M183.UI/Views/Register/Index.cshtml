@@ -8,6 +8,8 @@
 <div class="block long">
     @using (Html.BeginForm("Index", "Register", null, FormMethod.Post, new { @class = "pure-form pure-form-stacked" }))
     {
+        @Html.ValidationSummary()
+
         @Html.LabelFor(m => m.Username)
         @Html.TextBoxFor(m => m.Username)
 
