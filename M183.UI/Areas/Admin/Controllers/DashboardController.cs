@@ -23,7 +23,7 @@ namespace M183.UI.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult SearchPost(string query, string submit)
         {
-            //TODO: SQL Injection Prevention?
+            // Here, SQL injection attack is prevented by using Linq. Reference: https://stackoverflow.com/a/473186
             List<PostViewModel> postViewModels = new List<PostViewModel>();
             Repository repository = new Repository();
             switch (submit)
@@ -37,6 +37,7 @@ namespace M183.UI.Areas.Admin.Controllers
                 default:
                     break;
             }
+            ViewBag.SearchedQuery = query;
             return View("Index", postViewModels);
         }
     }

@@ -7,7 +7,7 @@
     <h1 class="title">
         Admin Dashboard
         <span class="control">
-            <input type="text" name="query" placeholder="Search query" />
+            <input type="text" name="query" placeholder="@(string.IsNullOrEmpty(ViewBag.SearchedQuery) ? "Seach query" : "Searched: " + ViewBag.SearchedQuery)" />
             <input type="submit" name="submit" value="Show all" class="pure-button pure-button-primary" />
             <input type="submit" name="submit" value="Search" class="pure-button pure-button-primary" />
         </span>

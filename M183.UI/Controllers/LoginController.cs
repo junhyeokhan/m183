@@ -59,7 +59,6 @@ namespace M183.UI.Controllers
                                     new Repository().AddToken(BusinessUser.Current.Id, code, DateTime.Now.AddMinutes(5));
                                     return View();
                                 }
-                                //TODO: It does not work yet.
                             case AuthenticationMethod.Email:
                                 {
                                     SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
