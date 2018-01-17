@@ -233,7 +233,6 @@ namespace M183.BusinessLogic
             return db.User.Where(u => u.Id == userId).FirstOrDefault();
         }
 
-        #region Posts
         public List<PostViewModel> GetAllPosts(string query, bool onlyPublished)
         {
             return db.Post
@@ -275,6 +274,29 @@ namespace M183.BusinessLogic
                         Title = p.Title,
                     })
                     .ToList();
+        }
+        public PostViewModel GetPostDetail(int postId)
+        {
+            PostViewModel postViewModel = new PostViewModel();
+            Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
+            if (post != null)
+            {
+                postViewModel.Id = post.Id;
+                postViewModel.Title = post.Title;
+                postViewModel.Description = post.Description;
+                postViewModel.CreatedOn = post.CreatedOn;
+                postViewModel.EditedOn = post.EditedOn;
+                postViewModel.Content = post.Content;
+                postViewModel.Comments = post.Comments
+                        .Select(c => new CommentViewModel()
+                        {
+                            Id = c.Id,
+                            CreatedOn = c.CreatedOn,
+                            Text = c.Text,
+                        })
+                        .ToList();
+            }
+            return postViewModel;
         }
         public void SavePost(PostViewModel postViewModel)
         {
@@ -322,6 +344,7 @@ namespace M183.BusinessLogic
                 }
             }
         }
+
         public void DeletePost(int postId)
         {
             Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
@@ -332,6 +355,22 @@ namespace M183.BusinessLogic
                 db.SaveChanges();
             }
         }
-        #endregion
+
+        public void AddComment(int postId, string text)
+        {
+            Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
+
+            if (post != null)
+            {
+                Comment comment = new Comment()
+                {
+                    CreatedOn = DateTime.Now,
+                    Text = text,
+                    Post = post,
+                };
+                db.Comment.Add(comment);
+                db.SaveChanges();
+            }
+        }
     }
 }

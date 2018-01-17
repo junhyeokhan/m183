@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace M183.BusinessLogic.ViewModels
 {
@@ -15,5 +16,7 @@ namespace M183.BusinessLogic.ViewModels
         public DateTime CreatedOn { get; set; }
         public DateTime? EditedOn { get; set; }
         public DateTime? DeletedOn { get; set; }
+
+        public virtual List<CommentViewModel> Comments { get; set; }
     }
 }

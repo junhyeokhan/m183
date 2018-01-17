@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace M183.UI.Areas.User.Controllers
+namespace M183.UI.Controllers
 {
     public class PostController : Controller
     {
@@ -35,6 +35,19 @@ namespace M183.UI.Areas.User.Controllers
             //TODO: Authorize user
             new Repository().DeletePost(postId);
             return RedirectToAction("Index", "Dashboard");
+        }
+
+        [HttpGet]
+        public ActionResult PostDetail(int postId)
+        {
+            return View(new Repository().GetPostDetail(postId));
+        }
+
+        [HttpPost]
+        public ActionResult AddComment(int Id, string comment)
+        {
+            new Repository().AddComment(Id, comment);
+            return RedirectToAction("PostDetail", new { postId = Id });
         }
     }
 }

@@ -24,6 +24,7 @@ namespace M183.DataAccess
 
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<PostStatus> PostStatus { get; set; }
+        public virtual DbSet<Comment> Comment { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

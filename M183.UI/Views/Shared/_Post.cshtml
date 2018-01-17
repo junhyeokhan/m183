@@ -3,7 +3,12 @@
 @using (Html.BeginForm("EditPost", "Post", new { area = "user" }, FormMethod.Post, new { @class = "pure-form pure-form-stacked" }))
 {
     <div class="block long">
-        <h2>@Model.Title @(Model.DeletedOn != null ? "(Delete on " + Model.DeletedOn + ")" : "")</h2>
+        <h2 class="title">
+            @Model.Title @(Model.DeletedOn != null ? "(Delete on " + Model.DeletedOn + ")" : "")
+            <span class="control">
+                @Html.ActionLink("Detail >", "PostDetail", "Post", new { area = "", postId = Model.Id }, new { @class = "pure-button" })
+            </span>
+        </h2>
         <p>@Model.Content</p>
         <p>@Model.Description</p>
         <p>Written on: @Model.CreatedOn</p>
