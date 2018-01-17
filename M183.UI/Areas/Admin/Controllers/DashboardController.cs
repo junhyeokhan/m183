@@ -17,7 +17,7 @@ namespace M183.UI.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Login", new { area = "" });
             }
 
-            return View(new Repository().GetAllPosts("", false));
+            return View(new Repository().GetAllPosts("", false, true));
         }
         
         [HttpPost]
@@ -29,10 +29,10 @@ namespace M183.UI.Areas.Admin.Controllers
             switch (submit)
             {
                 case "Search":
-                    postViewModels = repository.GetAllPosts(query, false);
+                    postViewModels = repository.GetAllPosts(query, false, true);
                     break;
                 case "Show all":
-                    postViewModels = repository.GetAllPosts("", false);
+                    postViewModels = repository.GetAllPosts("", false, true);
                     break;
                 default:
                     break;

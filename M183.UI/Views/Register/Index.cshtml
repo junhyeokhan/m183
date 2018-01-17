@@ -17,7 +17,10 @@
         @Html.PasswordFor(m => m.Password)
 
         @Html.LabelFor(m => m.MobileNumber)
-        @Html.TextBoxFor(m => m.MobileNumber)
+        @Html.TextBoxFor(m => m.MobileNumber, new { placeholder = "+41 12 345 78 90" })
+
+        @Html.LabelFor(m => m.EmailAddress)
+        @Html.TextBoxFor(m => m.EmailAddress, new { type = "email", placeholder = "example@email.com" })
 
         @Html.LabelFor(m => m.AuthenticationMethod)
         @Html.DropDownListFor(o => o.AuthenticationMethod, Enum.GetValues(typeof(AuthenticationMethod)).Cast<AuthenticationMethod>().Select(x => new SelectListItem { Text = x.ToString(), Value = ((int)x).ToString() }))

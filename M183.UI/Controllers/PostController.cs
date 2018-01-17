@@ -1,4 +1,5 @@
 ﻿using M183.BusinessLogic;
+using M183.BusinessLogic.Models;
 using M183.BusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -32,8 +33,11 @@ namespace M183.UI.Controllers
         [HttpGet]
         public ActionResult DeletePost(int postId)
         {
-            //TODO: Authorize user
-            new Repository().DeletePost(postId);
+            Repository repository = new Repository();
+            if (repository.IsUserAuthorisedToPost(BusinessUser.Current.Id, postId))
+            {
+                repository.DeletePost(postId);
+            }
             return RedirectToAction("Index", "Home");
         }
 

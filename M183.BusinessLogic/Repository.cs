@@ -40,6 +40,7 @@ namespace M183.BusinessLogic
                         Password = registerViewModel.Password,
                         MobileNumber = registerViewModel.MobileNumber,
                         AuthenticationMode = (int)registerViewModel.AuthenticationMethod,
+                        EmailAddress = registerViewModel.EmailAddress,
                     };
                     db.User.Add(user);
 
@@ -124,6 +125,7 @@ namespace M183.BusinessLogic
                         BusinessUser.Current.Username = user.UserName;
                         BusinessUser.Current.MobileNumber = user.MobileNumber;
                         BusinessUser.Current.AuthenticationMethod = (AuthenticationMethod)user.AuthenticationMode;
+                        BusinessUser.Current.EmailAddress = user.EmailAddress;
 
                         isAuthenticated = true;
                     }
@@ -266,7 +268,7 @@ namespace M183.BusinessLogic
             }
         }
 
-        public List<PostViewModel> GetAllPosts(string query, bool onlyPublished)
+        public List<PostViewModel> GetAllPosts(string query, bool onlyPublished, bool alsoDeleted)
         {
             using (DatabaseContext db = new DatabaseContext())
             {
@@ -291,6 +293,9 @@ namespace M183.BusinessLogic
                     .Where(p => onlyPublished ?
                         p.IsPublished :
                         true)
+                    .Where(p => alsoDeleted ?
+                        true :
+                        p.DeletedOn == null)
                     .ToList();
             }
         }

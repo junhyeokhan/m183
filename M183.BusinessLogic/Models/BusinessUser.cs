@@ -26,16 +26,15 @@ namespace M183.BusinessLogic.Models
             }
         }
 
-
-
+        #region Properties
         public int Id { get; set; }
+        public bool IsBlocked { get; set; }
+        public bool IsVerified { get; set; }
         public string Username { get; set; }
         public string MobileNumber { get; set; }
-        public AuthenticationMethod AuthenticationMethod { get; set; }
-        public bool IsVerified { get; set; }
+        public string EmailAddress { get; set; }
         public List<Role> Roles { get; set; }
-        public bool IsBlocked { get; set; }
-
+        public AuthenticationMethod AuthenticationMethod { get; set; }
         public bool IsAuthenticated
         {
             get
@@ -43,6 +42,7 @@ namespace M183.BusinessLogic.Models
                 return Id > 0 && IsVerified;
             }
         }
+        #endregion
 
         public bool HasRole(Role role)
         {

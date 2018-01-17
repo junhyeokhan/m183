@@ -23,7 +23,7 @@ namespace M183.UI.Controllers
             }
 
             // Otherwise get all published posts and show them to user
-            return View(new Repository().GetAllPosts("", true));
+            return View(new Repository().GetAllPosts("", false, false));
         }
     }
 }

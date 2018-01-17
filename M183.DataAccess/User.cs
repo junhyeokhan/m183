@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace M183.DataAccess
 {
@@ -13,6 +9,7 @@ namespace M183.DataAccess
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MobileNumber { get; set; }
+        public string EmailAddress { get; set; }
         //TODO: Save username as hash
         public string UserName { get; set; }
         //TODO: Save password as hash

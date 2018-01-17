@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using M183.BusinessLogic;
 using M183.BusinessLogic.Models;
 using M183.BusinessLogic.ViewModels;
+using System.Net.Mail;
 
 namespace M183.UI.Controllers
 {
@@ -36,6 +37,7 @@ namespace M183.UI.Controllers
                 {
                     try
                     {
+                        string code = new Random().Next(999999).ToString();
                         switch (BusinessUser.Current.AuthenticationMethod)
                         {
                             case AuthenticationMethod.SMS:
@@ -43,7 +45,6 @@ namespace M183.UI.Controllers
                                     WebRequest request = (HttpWebRequest)WebRequest.Create("https://rest.nexmo.com/sms/json");
                                     string secret = "d6b2d10b06f2a697";
                                     string key = "5e4521b6";
-                                    string code = new Random().Next(999999).ToString();
                                     string postData = string.Format("api_key={0}&api_secret={1}&to={2}&from=M183&text=Your code: {3}\n", key, secret, BusinessUser.Current.MobileNumber, code);
                                     byte[] data = Encoding.ASCII.GetBytes(postData);
                                     request.Method = "POST";
@@ -61,25 +62,13 @@ namespace M183.UI.Controllers
                                 //TODO: It does not work yet.
                             case AuthenticationMethod.Email:
                                 {
-                                    var request = (HttpWebRequest)WebRequest.Create("https://api.mailgun.net/v3/DOMAIN_NAME/messages");
-                                    String encoded = System.Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("api:API_KEY"));
-                                    request.Headers.Add("Authorization", "Basic " + encoded);
-                                    var secret = "TEST_SECRET";
-                                    var postData = "from=Test User <mailgun@DOMAIN_NAME>";
-                                    postData += "&to=MY_AUTHORIZED_RECIPIENT_EMAIL_ADDRESS";
-                                    postData += "&subject=Secret-Token";
-                                    postData += "&text=\"" + secret + "\"";
-                                    var data = Encoding.ASCII.GetBytes(postData);
-                                    request.Method = "POST";
-                                    request.ContentType = "application/x-www-form-urlencoded";
-                                    request.ContentLength = data.Length;
-                                    using (var stream = request.GetRequestStream())
+                                    SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
                                     {
-                                        stream.Write(data, 0, data.Length);
-                                    }
-                                    var response = (HttpWebResponse)request.GetResponse();
-                                    var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-                                    ViewBag.Message = responseString;
+                                        Credentials = new NetworkCredential("M183.Junhyeok.Han@gmail.com", "MySecretPassword"),
+                                        EnableSsl = true,
+                                    };
+                                    smtpClient.Send("No-Reply@M183.com", BusinessUser.Current.EmailAddress, "M183 - Verification code for your accoun", "Your code: " + code);
+                                    new Repository().AddToken(BusinessUser.Current.Id, code, DateTime.Now.AddMinutes(5));
                                     return View();
                                 }
                             default:
