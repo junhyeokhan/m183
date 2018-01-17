@@ -24,5 +24,6 @@ namespace M183.DataAccess
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
         public virtual ICollection<UserStatus> UserStatues { get; set; }
+        public virtual ICollection<UserLog> UserLogs { get; set; }
     }
 }

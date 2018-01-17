@@ -56,14 +56,29 @@ namespace M183.BusinessLogic
 
             if (user != null)
             {
-                if (loginViewModel.Password == user.Password)
+                // Is last status blocked?
+                if (user.UserStatues.Where(us => us.DeletedOn == null).OrderByDescending(us => us.CreatedOn).FirstOrDefault().Status == (int)Status.Blocked)
                 {
-                    BusinessUser.Current.Id = user.Id;
-                    BusinessUser.Current.Username = user.UserName;
-                    BusinessUser.Current.MobileNumber = user.MobileNumber;
-                    BusinessUser.Current.AuthenticationMethod = (AuthenticationMethod)user.AuthenticationMode;
+                    BusinessUser.Current.IsBlocked = true;
                 }
-                isAuthenticated = true;
+                else
+                {
+                    if (loginViewModel.Password == user.Password)
+                    {
+                        BusinessUser.Current.Id = user.Id;
+                        BusinessUser.Current.Username = user.UserName;
+                        BusinessUser.Current.MobileNumber = user.MobileNumber;
+                        BusinessUser.Current.AuthenticationMethod = (AuthenticationMethod)user.AuthenticationMode;
+
+                        isAuthenticated = true;
+                    }
+                    // Is password wrong?
+                    else
+                    {
+                        // Add log
+                        SaveUserLog(user.Id, LogClass.FailedLoginAttempt, "Login", "False password is entere.");
+                    }
+                }
             }
 
             return isAuthenticated;
@@ -119,7 +134,7 @@ namespace M183.BusinessLogic
                         token.Deleted = true;
 
                         // Add user log
-                        SaveUserLog(LogClass.Information, "Login", "User" + user.UserName + " is logged in.");
+                        SaveUserLog(userId, LogClass.SuccessfullLogin, "Login", "User" + user.UserName + " is logged in.");
 
                         //TODO: Add session Id
                         // Add user login
@@ -128,13 +143,18 @@ namespace M183.BusinessLogic
 
                         db.SaveChanges();
                     }
+                    // Is entered token false?
+                    else
+                    {
+                        AddFailedAttempt(userId);
+                    }
                 }
             }
         }
 
-        public void SaveUserLog(LogClass logClass, string action, string message)
+        public void SaveUserLog(int userId, LogClass logClass, string action, string message)
         {
-            User user = db.User.Where(u => u.Id == BusinessUser.Current.Id).FirstOrDefault();
+            User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
 
             UserLog userLog = new UserLog()
             {
@@ -147,6 +167,29 @@ namespace M183.BusinessLogic
 
             db.UserLog.Add(userLog);
             db.SaveChanges();
+        }
+
+        public void AddFailedAttempt(int userId)
+        {
+            SaveUserLog(userId, LogClass.FailedLoginAttempt, "Login", "False code is entered.");
+
+            User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
+
+            // Did last all three attempts all fail?
+            if (user.UserLogs.OrderByDescending(ul => ul.Timestamp).Take(3).All(ul => ul.Class == (int)LogClass.FailedLoginAttempt))
+            {
+                UserStatus userStatus = new UserStatus()
+                {
+                    CreatedOn = DateTime.Now,
+                    DeletedOn = null,
+                    ModifiedOn = null,
+                    Status = (int)Status.Blocked,
+                    User = user,
+                };
+
+                db.UserStatus.Add(userStatus);
+                db.SaveChanges();
+            }
         }
     }
 }

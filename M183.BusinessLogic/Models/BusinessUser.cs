@@ -36,6 +36,7 @@ namespace M183.BusinessLogic.Models
         public AuthenticationMethod AuthenticationMethod { get; set; }
         public bool IsVerified { get; set; }
         public List<Role> Roles { get; set; }
+        public bool IsBlocked { get; set; }
 
         public bool IsAuthenticated
         {
