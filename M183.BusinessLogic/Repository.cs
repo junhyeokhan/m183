@@ -9,91 +9,111 @@ namespace M183.BusinessLogic
 {
     public class Repository
     {
-        private static DatabaseContext db = new DatabaseContext();
-
+        /// <summary>
+        /// This method tries to register a new user
+        /// </summary>
+        /// <param name="registerViewModel">Necessary data of user as RegisterViewModel</param>
+        /// <returns>String.Empty if there was no error, error message if there was an error, as string</returns>
         public string TryRegister(RegisterViewModel registerViewModel)
         {
             string message = string.Empty;
 
-            User user = db.User
-                    .Where(u => u.UserName == registerViewModel.Username)
-                    .FirstOrDefault();
-
-            if (user != null)
+            using (DatabaseContext db = new DatabaseContext())
             {
-                message = "A user with entered username already exists. Please entere another username.";
-            }
-            else
-            {
-                user = new User()
+                // Check if there is any user with same username
+                User user = db.User
+                           .Where(u => u.UserName == registerViewModel.Username)
+                           .FirstOrDefault();
+                
+                // User with same username already exists
+                if (user != null)
                 {
-                    UserName = registerViewModel.Username,
-                    Password = registerViewModel.Password,
-                    MobileNumber = registerViewModel.MobileNumber,
-                    AuthenticationMode = (int)registerViewModel.AuthenticationMethod,
-                };
-                db.User.Add(user);
-
-                UserRole userRole = new UserRole()
+                    message = "A user with entered username already exists. Please entere another username.";
+                }
+                // No user with same username exists
+                else
                 {
-                    Role = (int)Role.User,
-                    User = user
-                };
-                db.UserRole.Add(userRole);
+                    // Create new user with submitted data
+                    user = new User()
+                    {
+                        UserName = registerViewModel.Username,
+                        Password = registerViewModel.Password,
+                        MobileNumber = registerViewModel.MobileNumber,
+                        AuthenticationMode = (int)registerViewModel.AuthenticationMethod,
+                    };
+                    db.User.Add(user);
 
-                db.SaveChanges();
+                    // Add user role as default
+                    UserRole userRole = new UserRole()
+                    {
+                        Role = (int)Role.User,
+                        User = user
+                    };
+                    db.UserRole.Add(userRole);
+
+                    // Save all changes
+                    db.SaveChanges();
+                }
             }
-
             return message;
         }
 
+        /// <summary>
+        /// This method checks if a user is authorised to a post
+        /// </summary>
+        /// <param name="userId">Identifier of the user</param>
+        /// <param name="postId">Identifier of the post</param>
+        /// <returns>True if user was authorised, false if user was not authorised, as bool</returns>
         public bool IsUserAuthorisedToPost(int userId, int postId)
         {
             bool isAuthorised = false;
-
-            User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
-            Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
-
-            if (user != null && post != null)
+            using (DatabaseContext db = new DatabaseContext())
             {
-                isAuthorised = user.Posts.Contains(post);
+                User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
+                Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
+                if (user != null && post != null)
+                {
+                    isAuthorised = user.Posts.Contains(post);
+                }
             }
-
             return isAuthorised;
         }
 
+        /// <summary>
+        /// This method tries to log in with submitted credentials
+        /// </summary>
+        /// <param name="loginViewModel">Credentials as LoginViewModel</param>
+        /// <returns>True if a user with submitted username and password was found, false if user was not found, as bool</returns>
         public bool TryLogIn(LoginViewModel loginViewModel)
         {
             bool isAuthenticated = false;
-
-            User user = db.User
-                    .Where(u => u.UserName == loginViewModel.Username)
-                    .FirstOrDefault();
-
-            if (user != null)
+            using (DatabaseContext db = new DatabaseContext())
             {
-                UserStatus userStatus = user.UserStatues == null ?
-                        null :
-                        user.UserStatues.Where(us => us.DeletedOn == null).OrderByDescending(us => us.CreatedOn).FirstOrDefault();
+                User user = db.User.Where(u => u.UserName == loginViewModel.Username).FirstOrDefault();
+                if (user != null)
+                {
+                    UserStatus userStatus = user.UserStatues?.Where(us => us.DeletedOn == null).OrderByDescending(us => us.CreatedOn).FirstOrDefault();
 
-                // Is last status blocked?
-                if (userStatus != null)
-                {
-                    BusinessUser.Current.IsBlocked = userStatus.Status == (int)UserStatusCode.Blocked;
-                }
-                else
-                {
-                    userStatus = new UserStatus()
+                    // Is last status blocked?
+                    if (userStatus != null)
                     {
-                        CreatedOn = DateTime.Now,
-                        DeletedOn = null,
-                        ModifiedOn = null,
-                        Status = (int)UserStatusCode.Default,
-                        User = user,
-                    };
+                        BusinessUser.Current.IsBlocked = userStatus.Status == (int)UserStatusCode.Blocked;
+                    }
+                    else
+                    {
+                        userStatus = new UserStatus()
+                        {
+                            CreatedOn = DateTime.Now,
+                            DeletedOn = null,
+                            ModifiedOn = null,
+                            Status = (int)UserStatusCode.Default,
+                            User = user,
+                        };
 
-                    db.UserStatus.Add(userStatus);
-                    db.SaveChanges();
+                        db.UserStatus.Add(userStatus);
+                        db.SaveChanges();
+                    }
+
                 }
 
                 if (!BusinessUser.Current.IsBlocked)
@@ -122,67 +142,72 @@ namespace M183.BusinessLogic
 
         public void AddToken(int userId, string code, DateTime expiry)
         {
-            User user = db.User
-                    .Where(u => u.Id == userId)
-                    .FirstOrDefault();
-
-            if (user != null)
+            using (DatabaseContext db = new DatabaseContext())
             {
-                Token token = new Token()
-                {
-                    User = user,
-                    Expiry = expiry,
-                    TokenString = code,
-                };
-                db.Token.Add(token);
-                db.SaveChanges();
-            }
+                User user = db.User
+                        .Where(u => u.Id == userId)
+                        .FirstOrDefault();
 
+                if (user != null)
+                {
+                    Token token = new Token()
+                    {
+                        User = user,
+                        Expiry = expiry,
+                        TokenString = code,
+                    };
+                    db.Token.Add(token);
+                    db.SaveChanges();
+                }
+            }
         }
 
         public void VerifyToken(int userId, string code, string ipAddress)
         {
-            User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
-
-            if (user != null)
+            using (DatabaseContext db = new DatabaseContext())
             {
-                // Get the last non-expired token
-                Token token = user.Tokens
-                        .Where(t => t.Expiry >= DateTime.Now && !t.Deleted)
-                        .OrderByDescending(t => t.Expiry)
-                        .FirstOrDefault();
+                User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
 
-                // Is there any token as queried?
-                if (token != null)
+                if (user != null)
                 {
-                    // Does the token have same code as submitted code?
-                    if (token.TokenString == code)
+                    // Get the last non-expired token
+                    Token token = user.Tokens
+                            .Where(t => t.Expiry >= DateTime.Now && !t.Deleted)
+                            .OrderByDescending(t => t.Expiry)
+                            .FirstOrDefault();
+
+                    // Is there any token as queried?
+                    if (token != null)
                     {
-                        // Mark current user (session) as verified
-                        BusinessUser.Current.IsVerified = true;
+                        // Does the token have same code as submitted code?
+                        if (token.TokenString == code)
+                        {
+                            // Mark current user (session) as verified
+                            BusinessUser.Current.IsVerified = true;
 
-                        // Add user's roles
-                        BusinessUser.Current.Roles = user.UserRoles
-                                .Select(r => (Role)r.Role)
-                                .ToList();
+                            // Add user's roles
+                            BusinessUser.Current.Roles = user.UserRoles
+                                    .Select(r => (Role)r.Role)
+                                    .ToList();
 
-                        // Delete used token
-                        token.Deleted = true;
+                            // Delete used token
+                            token.Deleted = true;
 
-                        // Add user log
-                        SaveUserLog(userId, LogClass.SuccessfullLogin, "Login", "User" + user.UserName + " is logged in.");
+                            // Add user log
+                            SaveUserLog(userId, LogClass.SuccessfullLogin, "Login", "User" + user.UserName + " is logged in.");
 
-                        //TODO: Add session Id
-                        // Add user login
-                        UserLogin userLogin = new UserLogin() { User = user, SessionId = "", CreatedOn = DateTime.Now, DeletedOn = null, ModifiedOn = null, IP = ipAddress };
-                        db.UserLogin.Add(userLogin);
+                            //TODO: Add session Id
+                            // Add user login
+                            UserLogin userLogin = new UserLogin() { User = user, SessionId = "", CreatedOn = DateTime.Now, DeletedOn = null, ModifiedOn = null, IP = ipAddress };
+                            db.UserLogin.Add(userLogin);
 
-                        db.SaveChanges();
-                    }
-                    // Is entered token false?
-                    else
-                    {
-                        AddFailedAttempt(userId);
+                            db.SaveChanges();
+                        }
+                        // Is entered token false?
+                        else
+                        {
+                            AddFailedAttempt(userId);
+                        }
                     }
                 }
             }
@@ -190,52 +215,62 @@ namespace M183.BusinessLogic
 
         public void SaveUserLog(int userId, LogClass logClass, string action, string message)
         {
-            User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
-
-            UserLog userLog = new UserLog()
+            using (DatabaseContext db = new DatabaseContext())
             {
-                Action = action,
-                Class = (int)logClass,
-                Message = message,
-                Timestamp = DateTime.Now,
-                User = user
-            };
+                User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
 
-            db.UserLog.Add(userLog);
-            db.SaveChanges();
+                UserLog userLog = new UserLog()
+                {
+                    Action = action,
+                    Class = (int)logClass,
+                    Message = message,
+                    Timestamp = DateTime.Now,
+                    User = user
+                };
+
+                db.UserLog.Add(userLog);
+                db.SaveChanges();
+            }
         }
 
         public void AddFailedAttempt(int userId)
         {
             SaveUserLog(userId, LogClass.FailedLoginAttempt, "Login", "False code is entered.");
 
-            User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
-
-            // Did last all three attempts all fail?
-            if (user.UserLogs.OrderByDescending(ul => ul.Timestamp).Take(3).All(ul => ul.Class == (int)LogClass.FailedLoginAttempt))
+            using (DatabaseContext db = new DatabaseContext())
             {
-                UserStatus userStatus = new UserStatus()
+                User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
+                // Did last all three attempts all fail?
+                if (user.UserLogs.OrderByDescending(ul => ul.Timestamp).Take(3).All(ul => ul.Class == (int)LogClass.FailedLoginAttempt))
                 {
-                    CreatedOn = DateTime.Now,
-                    DeletedOn = null,
-                    ModifiedOn = null,
-                    Status = (int)UserStatusCode.Blocked,
-                    User = user,
-                };
-
-                db.UserStatus.Add(userStatus);
-                db.SaveChanges();
+                    // Block the user
+                    UserStatus userStatus = new UserStatus()
+                    {
+                        CreatedOn = DateTime.Now,
+                        DeletedOn = null,
+                        ModifiedOn = null,
+                        Status = (int)UserStatusCode.Blocked,
+                        User = user,
+                    };
+                    db.UserStatus.Add(userStatus);
+                    db.SaveChanges();
+                }
             }
         }
 
         public User GetUser(int userId)
         {
-            return db.User.Where(u => u.Id == userId).FirstOrDefault();
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                return db.User.Where(u => u.Id == userId).FirstOrDefault();
+            }
         }
 
         public List<PostViewModel> GetAllPosts(string query, bool onlyPublished)
         {
-            return db.Post
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                return db.Post
                     .OrderByDescending(p => p.CreatedOn)
                     .Select(p => new PostViewModel()
                     {
@@ -257,11 +292,14 @@ namespace M183.BusinessLogic
                         p.IsPublished :
                         true)
                     .ToList();
+            }
         }
 
         public List<PostViewModel> GetPosts(int userId)
         {
-            return db.Post
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                return db.Post
                     .Where(p => p.User.Id == userId && p.DeletedOn == null)
                     .Select(p => new PostViewModel()
                     {
@@ -274,27 +312,31 @@ namespace M183.BusinessLogic
                         Title = p.Title,
                     })
                     .ToList();
+            }
         }
         public PostViewModel GetPostDetail(int postId)
         {
             PostViewModel postViewModel = new PostViewModel();
-            Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
-            if (post != null)
+            using (DatabaseContext db = new DatabaseContext())
             {
-                postViewModel.Id = post.Id;
-                postViewModel.Title = post.Title;
-                postViewModel.Description = post.Description;
-                postViewModel.CreatedOn = post.CreatedOn;
-                postViewModel.EditedOn = post.EditedOn;
-                postViewModel.Content = post.Content;
-                postViewModel.Comments = post.Comments
-                        .Select(c => new CommentViewModel()
-                        {
-                            Id = c.Id,
-                            CreatedOn = c.CreatedOn,
-                            Text = c.Text,
-                        })
-                        .ToList();
+                Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
+                if (post != null)
+                {
+                    postViewModel.Id = post.Id;
+                    postViewModel.Title = post.Title;
+                    postViewModel.Description = post.Description;
+                    postViewModel.CreatedOn = post.CreatedOn;
+                    postViewModel.EditedOn = post.EditedOn;
+                    postViewModel.Content = post.Content;
+                    postViewModel.Comments = post.Comments
+                            .Select(c => new CommentViewModel()
+                            {
+                                Id = c.Id,
+                                CreatedOn = c.CreatedOn,
+                                Text = c.Text,
+                            })
+                            .ToList();
+                }
             }
             return postViewModel;
         }
@@ -305,71 +347,80 @@ namespace M183.BusinessLogic
 
             if (user != null)
             {
-                // Check if the post exists already
-                Post post = db.Post.Where(p => p.Id == postViewModel.Id).FirstOrDefault();
-
-                // Is the post new one?
-                if (post == null)
+                using (DatabaseContext db = new DatabaseContext())
                 {
-                    // Create new post
-                    post = new Post()
+                    // Check if the post exists already
+                    Post post = db.Post.Where(p => p.Id == postViewModel.Id).FirstOrDefault();
+
+                    // Is the post new one?
+                    if (post == null)
                     {
-                        User = user,
-                        Title = postViewModel.Title,
-                        CreatedOn = DateTime.Now,
-                        DeletedOn = null,
-                        EditedOn = null,
-                        Content = postViewModel.Content,
-                        Description = postViewModel.Description,
-                    };
-                    db.Post.Add(post);
+                        // Create new post
+                        post = new Post()
+                        {
+                            User = user,
+                            Title = postViewModel.Title,
+                            CreatedOn = DateTime.Now,
+                            DeletedOn = null,
+                            EditedOn = null,
+                            Content = postViewModel.Content,
+                            Description = postViewModel.Description,
+                        };
+                        db.Post.Add(post);
 
-                    // Add initial post status
-                    PostStatus postStatus = new PostStatus()
+                        // Add initial post status
+                        PostStatus postStatus = new PostStatus()
+                        {
+                            Post = post,
+                            Timestamp = DateTime.Now,
+                            Status = postViewModel.IsPublished ?
+                                (int)PostStatusCode.Published :
+                                (int)PostStatusCode.Saved,
+                        };
+                        db.PostStatus.Add(postStatus);
+
+                        db.SaveChanges();
+                    }
+                    // Is the post existing one?
+                    else
                     {
-                        Post = post,
-                        Timestamp = DateTime.Now,
-                        Status = postViewModel.IsPublished ? 
-                            (int)PostStatusCode.Published :
-                            (int)PostStatusCode.Saved,
-                    };
-                    db.PostStatus.Add(postStatus);
 
-                    db.SaveChanges();
-                }
-                // Is the post existing one?
-                else
-                {
-
+                    }
                 }
             }
         }
 
         public void DeletePost(int postId)
         {
-            Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
-
-            if (post != null)
+            using (DatabaseContext db = new DatabaseContext())
             {
-                post.DeletedOn = DateTime.Now;
-                db.SaveChanges();
+                Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
+
+                if (post != null)
+                {
+                    post.DeletedOn = DateTime.Now;
+                    db.SaveChanges();
+                }
             }
         }
 
         public void AddComment(int postId, string text)
         {
-            Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
-
-            if (post != null)
+            using (DatabaseContext db = new DatabaseContext())
             {
-                Comment comment = new Comment()
+                Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
+
+                if (post != null)
                 {
-                    CreatedOn = DateTime.Now,
-                    Text = text,
-                    Post = post,
-                };
-                db.Comment.Add(comment);
-                db.SaveChanges();
+                    Comment comment = new Comment()
+                    {
+                        CreatedOn = DateTime.Now,
+                        Text = text,
+                        Post = post,
+                    };
+                    db.Comment.Add(comment);
+                    db.SaveChanges();
+                }
             }
         }
     }

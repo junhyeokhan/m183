@@ -26,7 +26,7 @@ namespace M183.UI.Controllers
         public ActionResult AddPost(PostViewModel postViewModel)
         {
             new Repository().SavePost(postViewModel);
-            return RedirectToAction("Index", "Dashboard");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -34,7 +34,7 @@ namespace M183.UI.Controllers
         {
             //TODO: Authorize user
             new Repository().DeletePost(postId);
-            return RedirectToAction("Index", "Dashboard");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

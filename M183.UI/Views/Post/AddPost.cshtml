@@ -6,7 +6,7 @@
 
 <h1>Add Post</h1>
 <div class="block long">
-    @using (Html.BeginForm("AddPost", "Post", new { area = "user" }, FormMethod.Post, new { @class = "pure-form pure-form-stacked" }))
+    @using (Html.BeginForm("AddPost", "Post", new { area = "" }, FormMethod.Post, new { @class = "pure-form pure-form-stacked" }))
     {
         @Html.ValidationSummary()
 

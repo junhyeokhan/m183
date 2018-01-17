@@ -1,14 +1,11 @@
 ﻿using System.Web.Mvc;
-using M183.BusinessLogic.Models;
-using M183.BusinessLogic.ViewModels;
-using System.Collections.Generic;
 using M183.BusinessLogic;
+using M183.BusinessLogic.Models;
 
 namespace M183.UI.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: Home
         public ActionResult Index()
         {
             // Is user already authenticated?
@@ -24,7 +21,8 @@ namespace M183.UI.Controllers
                     return RedirectToAction("Index", "Dashboard", new { area = "user" });
                 }
             }
-            
+
+            // Otherwise get all published posts and show them to user
             return View(new Repository().GetAllPosts("", true));
         }
     }

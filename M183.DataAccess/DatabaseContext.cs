@@ -2,8 +2,7 @@ namespace M183.DataAccess
 {
     using System;
     using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
+    using System.Data.Entity.Migrations;
 
     public partial class DatabaseContext : DbContext
     {
@@ -12,7 +11,15 @@ namespace M183.DataAccess
             // Add static reference to Entity framwork
             Type type = typeof(System.Data.Entity.SqlServer.SqlProviderServices);
 
-            //TODO: Create database when database does not exist
+            // Is database not existing yet?
+            if (!Database.Exists())
+            {
+                // Try to create the database
+                Database.Create();
+                // Run seeding method
+                var migrator = new DbMigrator(new Migrations.Configuration());
+                migrator.Update();
+            }
         }
 
         public virtual DbSet<User> User { get; set; }

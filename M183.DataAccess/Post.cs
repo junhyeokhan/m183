@@ -12,7 +12,6 @@ namespace M183.DataAccess
 
         public string Title { get; set; }
         public string Description { get; set; }
-        //TODO: Decision on data type
         public string Content { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? EditedOn { get; set; }
