@@ -17,6 +17,7 @@ namespace M183.DataAccess
         public string UserName { get; set; }
         //TODO: Save password as hash
         public string Password { get; set; }
+        public string Salt { get; set; }
         public int AuthenticationMode { get; set; }
 
         public virtual ICollection<Token> Tokens { get; set; }

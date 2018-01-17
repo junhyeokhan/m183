@@ -56,12 +56,29 @@ namespace M183.BusinessLogic
 
             if (user != null)
             {
+                UserStatus userStatus = user.UserStatues.Where(us => us.DeletedOn == null).OrderByDescending(us => us.CreatedOn).FirstOrDefault();
+
                 // Is last status blocked?
-                if (user.UserStatues.Where(us => us.DeletedOn == null).OrderByDescending(us => us.CreatedOn).FirstOrDefault().Status == (int)Status.Blocked)
+                if (userStatus != null)
                 {
-                    BusinessUser.Current.IsBlocked = true;
+                    BusinessUser.Current.IsBlocked = userStatus.Status == (int)Status.Blocked;
                 }
                 else
+                {
+                    userStatus = new UserStatus()
+                    {
+                        CreatedOn = DateTime.Now,
+                        DeletedOn = null,
+                        ModifiedOn = null,
+                        Status = (int)Status.Default,
+                        User = user,
+                    };
+
+                    db.UserStatus.Add(userStatus);
+                    db.SaveChanges();
+                }
+
+                if (!BusinessUser.Current.IsBlocked)
                 {
                     if (loginViewModel.Password == user.Password)
                     {
@@ -76,7 +93,8 @@ namespace M183.BusinessLogic
                     else
                     {
                         // Add log
-                        SaveUserLog(user.Id, LogClass.FailedLoginAttempt, "Login", "False password is entere.");
+                        SaveUserLog(user.Id, LogClass.FailedLoginAttempt, "Login", "False password is entered.");
+                        AddFailedAttempt(user.Id);
                     }
                 }
             }

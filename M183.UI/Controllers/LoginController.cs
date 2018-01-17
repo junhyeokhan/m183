@@ -28,7 +28,7 @@ namespace M183.UI.Controllers
             repository.TryLogIn(loginViewModel);
             if (BusinessUser.Current.IsBlocked)
             {
-                ModelState.AddModelError("Login", "User account is bloked.");
+                ModelState.AddModelError("Login", "User account is blocked.");
             }
             else
             {
@@ -56,8 +56,9 @@ namespace M183.UI.Controllers
                                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                                     string responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
                                     new Repository().AddToken(BusinessUser.Current.Id, code, DateTime.Now.AddMinutes(5));
-                                    break;
+                                    return View();
                                 }
+                                //TODO: It does not work yet.
                             case AuthenticationMethod.Email:
                                 {
                                     var request = (HttpWebRequest)WebRequest.Create("https://api.mailgun.net/v3/DOMAIN_NAME/messages");
@@ -79,7 +80,7 @@ namespace M183.UI.Controllers
                                     var response = (HttpWebResponse)request.GetResponse();
                                     var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
                                     ViewBag.Message = responseString;
-                                    break;
+                                    return View();
                                 }
                             default:
                                 break;
@@ -95,11 +96,11 @@ namespace M183.UI.Controllers
 
                     }
                 }
+
+                ModelState.AddModelError("Login", "Login was not successful.");
             }
 
-            ModelState.AddModelError("Login", "Login was not successful.");
-
-            return View();
+            return View("Index", loginViewModel);
         }
 
         [HttpPost]
