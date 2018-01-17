@@ -46,6 +46,11 @@ namespace M183.BusinessLogic.Models
             }
         }
 
+        public bool HasRole(Role role)
+        {
+            return Roles.Contains(role);
+        }
+
         public void Logout()
         {
             HttpContext.Current.Session["BusinessUser"] = null;

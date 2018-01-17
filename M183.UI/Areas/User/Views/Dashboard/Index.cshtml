@@ -1,5 +1,26 @@
-﻿@{ 
+﻿@model List<PostViewModel>
+
+@{
     ViewBag.Title = "User Dashboard";
 }
 
-<h1>User Dashboard</h1>
+<h1 class="title">
+    User Dashboard
+    <span class="control">
+        @Html.ActionLink("Create post", "AddPost", "Post", new { area = "user" }, new { @class = "pure-button pure-button-primary" })
+    </span>
+</h1>
+
+@if (Model.Count > 0)
+{
+    foreach (PostViewModel postViewModel in Model)
+    {
+        Html.RenderPartial("~/Views/Shared/_Post.cshtml", postViewModel);
+    }
+}
+else
+{
+    <div class="block long">
+        <p>You have not added any post yet.</p>
+    </div>
+}

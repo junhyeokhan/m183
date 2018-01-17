@@ -1,0 +1,25 @@
+﻿@model PostViewModel
+
+@{
+    ViewBag.Title = "Add Post";
+}
+
+<h1>Add Post</h1>
+<div class="block long">
+    @using (Html.BeginForm("AddPost", "Post", new { area = "user" }, FormMethod.Post, new { @class = "pure-form pure-form-stacked" }))
+    {
+        @Html.ValidationSummary()
+
+        @Html.HiddenFor(m => m.Id)
+
+        @Html.LabelFor(m => m.Title)
+        @Html.TextBoxFor(m => m.Title)
+
+        @Html.LabelFor(m => m.Description)
+        @Html.TextAreaFor(m => m.Description)
+
+        @Html.LabelFor(m => m.Content)
+        @Html.TextBoxFor(m => m.Content)
+        <input class="pure-button pure-button-primary" type="submit" name="submit" value="Save" />
+    }
+</div>

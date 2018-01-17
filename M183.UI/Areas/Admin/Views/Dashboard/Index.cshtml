@@ -1,5 +1,29 @@
-﻿@{ 
+﻿@{
     ViewBag.Title = "Admin";
 }
 
-<h1>Admin Dashboard</h1>
+@using (Html.BeginForm("SearchPost", "Dashboard", new { area = "admin" }, FormMethod.Post, new { @class = "pure-form" }))
+{
+    <h1 class="title">
+        Admin Dashboard
+        <span class="control">
+            <input type="text" name="query" placeholder="Search query" />
+            <input type="submit" name="submit" value="Show all" class="pure-button pure-button-primary" />
+            <input type="submit" name="submit" value="Search" class="pure-button pure-button-primary" />
+        </span>
+    </h1>
+}
+
+@if (Model.Count > 0)
+{
+    foreach (PostViewModel postViewModel in Model)
+    {
+        Html.RenderPartial("~/Views/Shared/_Post.cshtml", postViewModel);
+    }
+}
+else
+{
+    <div class="block long">
+        <p>There is no post saved in the database yet.</p>
+    </div>
+}

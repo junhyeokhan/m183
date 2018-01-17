@@ -137,7 +137,7 @@ namespace M183.UI.Controllers
                 ModelState.AddModelError("Login", "Entered token does not correspond original code.");
             }
 
-            return View(loginViewModel);
+            return View("Login", loginViewModel);
         }
 
         public ActionResult Logout()

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System.Web.Mvc;
+using M183.BusinessLogic;
+using M183.BusinessLogic.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using M183.BusinessLogic.ViewModels;
 
 namespace M183.UI.Areas.Admin.Controllers
 {
@@ -11,7 +11,33 @@ namespace M183.UI.Areas.Admin.Controllers
         // GET: Admin/Dashboard
         public ActionResult Index()
         {
-            return View();
+            if (!BusinessUser.Current.IsAuthenticated || !BusinessUser.Current.HasRole(Role.Admin))
+            {
+                ModelState.AddModelError("Login", "You need to log in first to perform this action.");
+                return RedirectToAction("Index", "Login", new { area = "" });
+            }
+
+            return View(new Repository().GetAllPosts(""));
+        }
+        
+        [HttpPost]
+        public ActionResult SearchPost(string query, string submit)
+        {
+            //TODO: SQL Injection Prevention?
+            List<PostViewModel> postViewModels = new List<PostViewModel>();
+            Repository repository = new Repository();
+            switch (submit)
+            {
+                case "Search":
+                    postViewModels = repository.GetAllPosts(query);
+                    break;
+                case "Show all":
+                    postViewModels = repository.GetAllPosts("");
+                    break;
+                default:
+                    break;
+            }
+            return View("Index", postViewModels);
         }
     }
 }

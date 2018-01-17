@@ -3,6 +3,7 @@ using System.Linq;
 using M183.DataAccess;
 using M183.BusinessLogic.Models;
 using M183.BusinessLogic.ViewModels;
+using System.Collections.Generic;
 
 namespace M183.BusinessLogic
 {
@@ -56,7 +57,9 @@ namespace M183.BusinessLogic
 
             if (user != null)
             {
-                UserStatus userStatus = user.UserStatues.Where(us => us.DeletedOn == null).OrderByDescending(us => us.CreatedOn).FirstOrDefault();
+                UserStatus userStatus = user.UserStatues == null ?
+                        null :
+                        user.UserStatues.Where(us => us.DeletedOn == null).OrderByDescending(us => us.CreatedOn).FirstOrDefault();
 
                 // Is last status blocked?
                 if (userStatus != null)
@@ -209,5 +212,96 @@ namespace M183.BusinessLogic
                 db.SaveChanges();
             }
         }
+
+        public User GetUser(int userId)
+        {
+            return db.User.Where(u => u.Id == userId).FirstOrDefault();
+        }
+
+        #region Posts
+        public List<PostViewModel> GetAllPosts(string query)
+        {
+            return db.Posts
+                    .OrderByDescending(p => p.CreatedOn)
+                    .Select(p => new PostViewModel()
+                    {
+                        Id = p.Id,
+                        Content = p.Content,
+                        CreatedOn = p.CreatedOn,
+                        DeletedOn = p.DeletedOn,
+                        Description = p.Description,
+                        EditedOn = p.EditedOn,
+                        Title = p.Title,
+                    })
+                    .Where(p => string.IsNullOrEmpty(query) ?
+                        true :
+                        p.Title.ToLower().Contains(query.ToLower()) ||
+                            p.Description.ToLower().Contains(query.ToLower()) ||
+                            p.Content.ToLower().Contains(query.ToLower()))
+                    .ToList();
+        }
+
+        public List<PostViewModel> GetPosts(int userId)
+        {
+            return db.Posts
+                    .Where(p => p.User.Id == userId && p.DeletedOn == null)
+                    .Select(p => new PostViewModel()
+                    {
+                        Id = p.Id,
+                        Content = p.Content,
+                        CreatedOn = p.CreatedOn,
+                        DeletedOn = p.DeletedOn,
+                        Description = p.Description,
+                        EditedOn = p.EditedOn,
+                        Title = p.Title,
+                    })
+                    .ToList();
+        }
+        public void SavePost(PostViewModel postViewModel)
+        {
+            // Check if user is logged in
+            User user = GetUser(BusinessUser.Current.Id);
+
+            if (user != null)
+            {
+                // Check if the post exists already
+                Post post = db.Posts.Where(p => p.Id == postViewModel.Id).FirstOrDefault();
+
+                // Is the post new one?
+                if (post == null)
+                {
+                    // Create new post
+                    post = new Post()
+                    {
+                        User = user,
+                        Title = postViewModel.Title,
+                        CreatedOn = DateTime.Now,
+                        DeletedOn = null,
+                        EditedOn = null,
+                        Content = postViewModel.Content,
+                        Description = postViewModel.Description,
+                    };
+
+                    db.Posts.Add(post);
+                    db.SaveChanges();
+                }
+                // Is the post existing one?
+                else
+                {
+
+                }
+            }
+        }
+        public void DeletePost(int postId)
+        {
+            Post post = db.Posts.Where(p => p.Id == postId).FirstOrDefault();
+
+            if (post != null)
+            {
+                post.DeletedOn = DateTime.Now;
+                db.SaveChanges();
+            }
+        }
+        #endregion
     }
 }

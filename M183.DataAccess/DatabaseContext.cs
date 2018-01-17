@@ -22,6 +22,8 @@ namespace M183.DataAccess
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<UserStatus> UserStatus { get; set; }
 
+        public virtual DbSet<Post> Posts { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
         }

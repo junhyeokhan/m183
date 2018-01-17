@@ -1,6 +1,6 @@
 ﻿/*
     Colors:
-        Red:
+        Red: #ca3c3c
         Blue: #0078e7
         Green:
         Yellow:
@@ -89,6 +89,24 @@ body {
         width: calc(100% - 40px);
     }
 
+.title .control {
+    float: right;
+}
+
+.title .control a {
+    font-size: 50%;
+    font-weight: normal;
+}
+    .title .control input {
+        font-size: 50%;
+        font-weight: normal;
+    }
+
 .space-right {
     margin-right: 10px;
+}
+
+.pure-button.pure-button-error {
+    background-color: #CA3C3C;
+    color: white;
 }
