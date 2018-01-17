@@ -33,6 +33,7 @@ namespace M183.BusinessLogic.Models
         public string Username { get; set; }
         public string MobileNumber { get; set; }
         public string EmailAddress { get; set; }
+        public string SessionId { get; set; }
         public List<Role> Roles { get; set; }
         public AuthenticationMethod AuthenticationMethod { get; set; }
         public bool IsAuthenticated
@@ -44,7 +45,7 @@ namespace M183.BusinessLogic.Models
         }
         #endregion
 
-        public bool HasRole(Role role)
+        public bool IsInRole(Role role)
         {
             return Roles.Contains(role);
         }
@@ -56,6 +57,7 @@ namespace M183.BusinessLogic.Models
 
         public void Logout()
         {
+            // Clear current session
             HttpContext.Current.Session["BusinessUser"] = null;
         }
     }

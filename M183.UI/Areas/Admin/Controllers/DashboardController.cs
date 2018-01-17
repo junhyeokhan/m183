@@ -3,15 +3,17 @@ using M183.BusinessLogic;
 using M183.BusinessLogic.Models;
 using System.Collections.Generic;
 using M183.BusinessLogic.ViewModels;
+using M183.UI.Security;
 
 namespace M183.UI.Areas.Admin.Controllers
 {
     public class DashboardController : Controller
     {
+        [AuthorizeAdmin]
         // GET: Admin/Dashboard
         public ActionResult Index()
         {
-            if (!BusinessUser.Current.IsAuthenticated || !BusinessUser.Current.HasRole(Role.Admin))
+            if (!BusinessUser.Current.IsAuthenticated || !BusinessUser.Current.IsInRole(Role.Admin))
             {
                 ModelState.AddModelError("Login", "You need to log in first to perform this action.");
                 return RedirectToAction("Index", "Login", new { area = "" });
@@ -19,7 +21,8 @@ namespace M183.UI.Areas.Admin.Controllers
 
             return View(new Repository().GetAllPosts("", false, true));
         }
-        
+
+        [AuthorizeAdmin]
         [HttpPost]
         public ActionResult SearchPost(string query, string submit)
         {

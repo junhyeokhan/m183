@@ -4,6 +4,8 @@ using M183.DataAccess;
 using M183.BusinessLogic.Models;
 using M183.BusinessLogic.ViewModels;
 using System.Collections.Generic;
+using System.Web.SessionState;
+using System.Runtime.Remoting.Contexts;
 
 namespace M183.BusinessLogic
 {
@@ -127,6 +129,12 @@ namespace M183.BusinessLogic
                         BusinessUser.Current.AuthenticationMethod = (AuthenticationMethod)user.AuthenticationMode;
                         BusinessUser.Current.EmailAddress = user.EmailAddress;
 
+                        // Add user login record
+                        UserLogin userLogin = new UserLogin()
+                        {
+
+                        };
+
                         isAuthenticated = true;
                     }
                     // Is password wrong?
@@ -140,6 +148,14 @@ namespace M183.BusinessLogic
             }
 
             return isAuthenticated;
+        }
+
+        public void TryLogOut()
+        {
+
+
+            // Reset current session
+            BusinessUser.Current.Logout();
         }
 
         public void AddToken(int userId, string code, DateTime expiry)
@@ -163,6 +179,7 @@ namespace M183.BusinessLogic
                 }
             }
         }
+
 
         public void VerifyToken(int userId, string code, string ipAddress)
         {
@@ -198,7 +215,7 @@ namespace M183.BusinessLogic
                             // Add user log
                             SaveUserLog(userId, LogClass.SuccessfullLogin, "Login", "User" + user.UserName + " is logged in.");
 
-                            //TODO: Add session Id
+                            //TODO: Update Session Id
                             // Add user login
                             UserLogin userLogin = new UserLogin() { User = user, SessionId = "", CreatedOn = DateTime.Now, DeletedOn = null, ModifiedOn = null, IP = ipAddress };
                             db.UserLogin.Add(userLogin);

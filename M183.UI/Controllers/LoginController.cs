@@ -130,9 +130,8 @@ namespace M183.UI.Controllers
 
         public ActionResult Logout()
         {
-            BusinessUser.Current.Logout();
-
-            return RedirectToAction("Index", "Home");
+            new Repository().TryLogOut();
+            return RedirectToAction("Index", "Login");
         }
     }
 }

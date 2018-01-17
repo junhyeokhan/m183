@@ -1,28 +1,24 @@
 ﻿using M183.BusinessLogic;
 using M183.BusinessLogic.Models;
 using M183.BusinessLogic.ViewModels;
+using M183.UI.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace M183.UI.Controllers
 {
     public class PostController : Controller
     {
-        // GET: User/Post
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+        [AuthorizeUser]
         [HttpGet]
         public ActionResult AddPost()
         {
             return View();
         }
 
+        [AuthorizeUser]
         [HttpPost]
         public ActionResult AddPost(PostViewModel postViewModel)
         {
@@ -30,6 +26,7 @@ namespace M183.UI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [AuthorizePostOwner]
         [HttpGet]
         public ActionResult DeletePost(int postId)
         {
