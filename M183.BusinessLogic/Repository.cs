@@ -1,12 +1,8 @@
-﻿using M183.BusinessLogic.Models;
-using M183.BusinessLogic.ViewModels;
-using M183.DataAccess;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using M183.DataAccess;
+using M183.BusinessLogic.Models;
+using M183.BusinessLogic.ViewModels;
 
 namespace M183.BusinessLogic
 {
@@ -36,6 +32,14 @@ namespace M183.BusinessLogic
                     AuthenticationMode = (int)registerViewModel.AuthenticationMethod,
                 };
                 db.User.Add(user);
+
+                UserRole userRole = new UserRole()
+                {
+                    Role = (int)Role.User,
+                    User = user
+                };
+                db.UserRole.Add(userRole);
+
                 db.SaveChanges();
             }
 
@@ -85,7 +89,7 @@ namespace M183.BusinessLogic
 
         }
 
-        public void VerifyToken(int userId, string code)
+        public void VerifyToken(int userId, string code, string ipAddress)
         {
             User user = db.User.Where(u => u.Id == userId).FirstOrDefault();
 
@@ -106,17 +110,43 @@ namespace M183.BusinessLogic
                         // Mark current user (session) as verified
                         BusinessUser.Current.IsVerified = true;
 
+                        // Add user's roles
+                        BusinessUser.Current.Roles = user.UserRoles
+                                .Select(r => (Role)r.Role)
+                                .ToList();
+
                         // Delete used token
                         token.Deleted = true;
 
                         // Add user log
-                        UserLog userLog = new UserLog() { User = user, Action = (int)UserActionType.LoggedIn, Timestamp = DateTime.Now };
-                        db.UserLog.Add(userLog);
+                        SaveUserLog(LogClass.Information, "Login", "User" + user.UserName + " is logged in.");
+
+                        //TODO: Add session Id
+                        // Add user login
+                        UserLogin userLogin = new UserLogin() { User = user, SessionId = "", CreatedOn = DateTime.Now, DeletedOn = null, ModifiedOn = null, IP = ipAddress };
+                        db.UserLogin.Add(userLogin);
 
                         db.SaveChanges();
                     }
                 }
             }
+        }
+
+        public void SaveUserLog(LogClass logClass, string action, string message)
+        {
+            User user = db.User.Where(u => u.Id == BusinessUser.Current.Id).FirstOrDefault();
+
+            UserLog userLog = new UserLog()
+            {
+                Action = action,
+                Class = (int)logClass,
+                Message = message,
+                Timestamp = DateTime.Now,
+                User = user
+            };
+
+            db.UserLog.Add(userLog);
+            db.SaveChanges();
         }
     }
 }

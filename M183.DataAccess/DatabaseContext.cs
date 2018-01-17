@@ -18,6 +18,8 @@ namespace M183.DataAccess
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Token> Token { get; set; }
         public virtual DbSet<UserLog> UserLog { get; set; }
+        public virtual DbSet<UserLogin> UserLogin { get; set; }
+        public virtual DbSet<UserRole> UserRole { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

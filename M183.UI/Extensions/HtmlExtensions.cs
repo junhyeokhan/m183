@@ -10,14 +10,15 @@ namespace M183.UI.Extensions
     /// </summary>
     public static class HtmlExtensions
     {
-        public static MvcHtmlString ActionMenuItem(this HtmlHelper htmlHelper, String linkText, String actionName, String controllerName)
+        public static MvcHtmlString ActionMenuItem(this HtmlHelper htmlHelper, String linkText, String actionName, String controllerName, String htmlClass, String area)
         {
             var tag = new TagBuilder("li");
             if (htmlHelper.ViewContext.RequestContext.IsCurrentRoute(null, controllerName, actionName))
             {
                 tag.AddCssClass("selected");
             }
-            tag.InnerHtml = htmlHelper.ActionLink(linkText, actionName, controllerName).ToString();
+            tag.AddCssClass(htmlClass);
+            tag.InnerHtml = htmlHelper.ActionLink(linkText, actionName, controllerName, new { area = area }, null).ToString();
             return MvcHtmlString.Create(tag.ToString());
         }
 

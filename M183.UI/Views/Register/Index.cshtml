@@ -10,10 +10,14 @@
     {
         @Html.LabelFor(m => m.Username)
         @Html.TextBoxFor(m => m.Username)
+
         @Html.LabelFor(m => m.Password)
         @Html.PasswordFor(m => m.Password)
+
         @Html.LabelFor(m => m.MobileNumber)
         @Html.TextBoxFor(m => m.MobileNumber)
+
+        @Html.LabelFor(m => m.AuthenticationMethod)
         @Html.DropDownListFor(o => o.AuthenticationMethod, Enum.GetValues(typeof(AuthenticationMethod)).Cast<AuthenticationMethod>().Select(x => new SelectListItem { Text = x.ToString(), Value = ((int)x).ToString() }))
 
         <input class="pure-button pure-button-primary" type="submit" name="submit" value="Register" />

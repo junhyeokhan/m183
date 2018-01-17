@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using M183.BusinessLogic.Models;
 
 namespace M183.UI.Controllers
 {
@@ -11,6 +8,20 @@ namespace M183.UI.Controllers
         // GET: Home
         public ActionResult Index()
         {
+            // Is user already authenticated?
+            if (BusinessUser.Current.IsAuthenticated)
+            {
+                // Redirect to dashboard according to the role
+                if (BusinessUser.Current.Roles.Contains(Role.Admin))
+                {
+                    return RedirectToAction("Index", "Dashboard", new { area = "admin" });
+                }
+                else if (BusinessUser.Current.Roles.Contains(Role.User))
+                {
+                    return RedirectToAction("Index", "Dashboard", new { area = "user" });
+                }
+            }
+            
             return View();
         }
     }

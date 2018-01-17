@@ -35,6 +35,7 @@ namespace M183.BusinessLogic.Models
         public string MobileNumber { get; set; }
         public AuthenticationMethod AuthenticationMethod { get; set; }
         public bool IsVerified { get; set; }
+        public List<Role> Roles { get; set; }
 
         public bool IsAuthenticated
         {

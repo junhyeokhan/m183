@@ -17,17 +17,16 @@
     </div>
     <div class="navigation">
         <ul>
-            @Html.ActionMenuItem("Home", "Index", "Home")
+            @Html.ActionMenuItem("Home", "Index", "Home", "", "")
 
             @if (BusinessUser.Current.IsAuthenticated)
             {
-                @Html.ActionMenuItem("Logout", "Logout", "Login")
+                @Html.ActionMenuItem("Logout", "Logout", "Login", "control", "")
             }
             else
             {
-
-                @Html.ActionMenuItem("Login", "Index", "Login")
-                @Html.ActionMenuItem("Register", "Index", "Register")
+                @Html.ActionMenuItem("Register", "Index", "Register", "control", "")
+                @Html.ActionMenuItem("Login", "Index", "Login", "control", "")
             }
         </ul>
     </div>

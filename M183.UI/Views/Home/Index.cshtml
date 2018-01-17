@@ -5,7 +5,7 @@
     @if (!BusinessUser.Current.IsAuthenticated)
     {
         <p>This is a web application for module 183.</p>
-        @Html.ActionLink("Login", "Index", "Login", null, new { @class = "pure-button" })
+        @Html.ActionLink("Login", "Index", "Login", null, new { @class = "pure-button space-right" })
         @Html.ActionLink("Register", "Index", "Register", null, new { @class = "pure-button pure-button-primary" })
     }
     else

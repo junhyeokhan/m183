@@ -43,6 +43,10 @@ body {
         float: left;
     }
 
+    .navigation ul li.control{
+        float: right;
+    }
+
         .navigation ul li a {
             display: block;
             color: black;
@@ -84,3 +88,7 @@ body {
     .block.long {
         width: calc(100% - 40px);
     }
+
+.space-right {
+    margin-right: 10px;
+}
