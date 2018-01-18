@@ -10,7 +10,7 @@
     {
         @Html.ValidationSummary()
 
-        @Html.HiddenFor(m => m.Id)
+        @Html.Hidden("Id", MD5Hash.HashId(Model.Id))
 
         @Html.LabelFor(m => m.Title)
         @Html.TextBoxFor(m => m.Title)

@@ -11,6 +11,8 @@ namespace M183.UI.Controllers
 {
     public class PostController : Controller
     {
+        private static Repository repository = new Repository();
+
         [AuthorizeUser]
         [HttpGet]
         public ActionResult AddPost()
@@ -20,16 +22,18 @@ namespace M183.UI.Controllers
 
         [AuthorizePostOwner]
         [HttpGet]
-        public ActionResult EditPost(int postId)
+        public ActionResult EditPost(string postId)
         {
-            return View(new Repository().GetPostDetail(postId));
+            int realId = repository.GetPostId(postId);
+            return View(repository.GetPostDetail(realId));
         }
 
         [AuthorizePostOwner]
         [HttpPost]
-        public ActionResult EditPost(PostViewModel postViewModel)
+        public ActionResult EditPost(PostViewModel postViewModel, string Id)
         {
-            new Repository().SavePost(postViewModel);
+            postViewModel.Id = repository.GetPostId(Id);
+            repository.SavePost(postViewModel);
             return RedirectToAction("Index", "Dashboard", new { area = "user" });
         }
 
@@ -37,43 +41,44 @@ namespace M183.UI.Controllers
         [HttpPost]
         public ActionResult AddPost(PostViewModel postViewModel)
         {
-            new Repository().SavePost(postViewModel);
+            repository.SavePost(postViewModel);
             return RedirectToAction("Index", "Home");
         }
 
         [AuthorizePostOwner]
         [HttpGet]
-        public ActionResult DeletePost(int postId)
+        public ActionResult DeletePost(string postId)
         {
-            Repository repository = new Repository();
-            if (repository.IsUserAuthorisedToPost(BusinessUser.Current.Id, postId))
+            int realId = repository.GetPostId(postId);
+            if (repository.IsUserAuthorisedToPost(BusinessUser.Current.Id, realId))
             {
-                repository.DeletePost(postId);
+                repository.DeletePost(realId);
             }
             return RedirectToAction("Index", "Home");
         }
         
         [HttpGet]
-        public ActionResult PostDetail(int postId)
+        public ActionResult PostDetail(string postId)
         {
-            return View(new Repository().GetPostDetail(postId));
+            int realId = repository.GetPostId(postId);
+            return View(repository.GetPostDetail(realId));
         }
 
         [HttpPost]
-        public ActionResult AddComment(PostViewModel postViewModel, int Id, string comment)
+        public ActionResult AddComment(PostViewModel postViewModel, string Id, string comment)
         {
-            Repository repository = new Repository();
+            int realId = repository.GetPostId(Id);
             // Validate length (Controller level)
             if (comment.Length > 200 || comment.Length < 1)
             {
                 ModelState.AddModelError("Comment", "Comment must be 1~200 characters long.");
-                postViewModel.Comments = repository.GetComments(Id);
+                postViewModel.Comments = repository.GetComments(realId);
                 return View("PostDetail", postViewModel);
             }
 
             // SQL Injection Prevention is done by LINQ and Entity Framework. Reference: https://stackoverflow.com/a/9079496
-            repository.AddComment(Id, comment);
-            return RedirectToAction("PostDetail", new { postId = Id });
+            repository.AddComment(realId, comment);
+            return RedirectToAction("PostDetail", new { postId = MD5Hash.HashId(realId) });
         }
     }
 }

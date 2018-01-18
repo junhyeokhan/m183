@@ -364,6 +364,21 @@ namespace M183.BusinessLogic
             }
             return postViewModel;
         }
+        public int GetPostId(string hash)
+        {
+            int postId = 0;
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                foreach (Post post in db.Post)
+                {
+                    if (MD5Hash.HashId(post.Id) == hash)
+                    {
+                        postId = post.Id;
+                    }
+                }
+            }
+            return postId;
+        }
         public List<CommentViewModel> GetComments(int postId)
         {
             List<CommentViewModel> comments = new List<CommentViewModel>();

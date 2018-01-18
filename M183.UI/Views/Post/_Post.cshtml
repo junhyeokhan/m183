@@ -6,7 +6,7 @@
         <h2 class="title">
             @Model.Title @(Model.DeletedOn != null ? "(Delete on " + Model.DeletedOn + ")" : "")
             <span class="control">
-                @Html.ActionLink("Detail >", "PostDetail", "Post", new { area = "", postId = Model.Id }, new { @class = "pure-button" })
+                @Html.ActionLink("Detail >", "PostDetail", "Post", new { area = "", postId = MD5Hash.HashId(Model.Id) }, new { @class = "pure-button" })
             </span>
         </h2>
         <p>@Model.Content</p>
@@ -16,8 +16,8 @@
 
         @if (BusinessUser.Current.IsAuthorisedToPost(Model.Id) && Model.DeletedOn == null)
         {
-            @Html.ActionLink("Edit", "EditPost", "Post", new { area = "", postId = Model.Id }, new { @class = "pure-button pure-button-primary space-right" })
-            @Html.ActionLink("Delete", "DeletePost", "Post", new { area = "", postId = Model.Id }, new { @class = "pure-button pure-button-error" })
+            @Html.ActionLink("Edit", "EditPost", "Post", new { area = "", postId = MD5Hash.HashId(Model.Id) }, new { @class = "pure-button pure-button-primary space-right" })
+            @Html.ActionLink("Delete", "DeletePost", "Post", new { area = "", postId = MD5Hash.HashId(Model.Id) }, new { @class = "pure-button pure-button-error" })
         }
     </div>
 }

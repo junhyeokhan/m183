@@ -1,4 +1,5 @@
-﻿using M183.BusinessLogic.Models;
+﻿using M183.BusinessLogic;
+using M183.BusinessLogic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +14,19 @@ namespace M183.UI.Security
         // Reference: https://stackoverflow.com/questions/11493873/how-to-implement-custom-authorize-attribute-for-the-following-case
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
+            Repository repository = new Repository();
+
             RouteData routeData = httpContext.Request.RequestContext.RouteData;
 
             int postId = 0;
 
             if (httpContext.Request.Params.AllKeys.Any(k => k == "postId"))
             {
-                int.TryParse(httpContext.Request.Params.GetValues("postId")[0], out postId);
+                postId = repository.GetPostId(httpContext.Request.Params.GetValues("postId")[0]);
             }
             else
             {
-                int.TryParse(httpContext.Request.Params.GetValues("Id")[0], out postId);
+                postId = repository.GetPostId(httpContext.Request.Params.GetValues("Id")[0]);
             }
 
             return BusinessUser.Current.IsAuthorisedToPost(postId);

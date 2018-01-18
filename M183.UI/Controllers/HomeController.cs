@@ -12,15 +12,20 @@ namespace M183.UI.Controllers
             return View(new Repository().GetAllPosts("", false, false));
         }
 
-        /*
-         * Answers for the questions
-         * 1) Hash function Reference: https://security.stackexchange.com/questions/211/how-to-securely-hash-passwords/
-         * I chose PBKDF2 because 
-         * Has been specified for a long time, seems unscathed for now.
-         * Is already implemented in various framework (e.g. it is provided with .NET).
-         * Highly configurable (although some implementations do not let you choose the hash function, e.g. the one in .NET is for SHA-1 only).
-         * Received NIST blessings (modulo the difference between hashing and key derivation; see later on).
-         * Configurable output length (again, see later on).
+        /* Answers for the questions
+         *  1) Why did you decide to use the Hash Algorithm (Username & Password)?
+         *      I have decided to use SHA-3 first, since it was the newest one. 
+         *      However, since SHA-3 is not supported yet, I have chosen another one - PBKDF2
+         *      The reasons why I chose it were:
+         *          It has been specified for a long time and seems unscathed for now.
+         *          It is already implemented in various framework. (e.g. .NET)
+         *          It is highly configurable with different variables.
+         *          It received NIST blessings.
+         *          It's output length can be configured.
+         *  2,3) In User table, there is reserved column for IP-Address. Which attack does it prevent?
+         *  Explain how these attacks work and how the countermeasures prevent the attacks.
+         *      Brute force attack: It can block the IP-Address after certain tries from the same IP-Address.
+         *      Phishing: We can notify/ask for verification when different IP-Address than the user normally uses has been used to log in.
          */
     }
 }
