@@ -15,7 +15,16 @@ namespace M183.UI.Security
         {
             RouteData routeData = httpContext.Request.RequestContext.RouteData;
 
-            int.TryParse(httpContext.Request.Params.GetValues("postId")[0], out int postId);
+            int postId = 0;
+
+            if (httpContext.Request.Params.AllKeys.Any(k => k == "postId"))
+            {
+                int.TryParse(httpContext.Request.Params.GetValues("postId")[0], out postId);
+            }
+            else
+            {
+                int.TryParse(httpContext.Request.Params.GetValues("Id")[0], out postId);
+            }
 
             return BusinessUser.Current.IsAuthorisedToPost(postId);
         }

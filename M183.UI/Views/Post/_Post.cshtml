@@ -16,7 +16,7 @@
 
         @if (BusinessUser.Current.IsAuthorisedToPost(Model.Id) && Model.DeletedOn == null)
         {
-            @Html.ActionLink("Edit", "EditPost", "Post", new { area = "" }, new { @class = "pure-button pure-button-primary space-right" })
+            @Html.ActionLink("Edit", "EditPost", "Post", new { area = "", postId = Model.Id }, new { @class = "pure-button pure-button-primary space-right" })
             @Html.ActionLink("Delete", "DeletePost", "Post", new { area = "", postId = Model.Id }, new { @class = "pure-button pure-button-error" })
         }
     </div>

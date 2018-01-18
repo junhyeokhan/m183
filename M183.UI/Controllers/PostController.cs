@@ -18,6 +18,21 @@ namespace M183.UI.Controllers
             return View();
         }
 
+        [AuthorizePostOwner]
+        [HttpGet]
+        public ActionResult EditPost(int postId)
+        {
+            return View(new Repository().GetPostDetail(postId));
+        }
+
+        [AuthorizePostOwner]
+        [HttpPost]
+        public ActionResult EditPost(PostViewModel postViewModel)
+        {
+            new Repository().SavePost(postViewModel);
+            return RedirectToAction("Index", "Dashboard", new { area = "user" });
+        }
+
         [AuthorizeUser]
         [HttpPost]
         public ActionResult AddPost(PostViewModel postViewModel)

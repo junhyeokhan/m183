@@ -344,6 +344,7 @@ namespace M183.BusinessLogic
                     postViewModel.EditedOn = post.EditedOn;
                     postViewModel.Content = post.Content;
                     postViewModel.Comments = GetComments(postViewModel.Id);
+                    postViewModel.IsPublished = post.PostStatuses.OrderByDescending(ps => ps.Timestamp).FirstOrDefault().Status == (int)PostStatusCode.Published;
                 }
             }
             return postViewModel;
@@ -413,7 +414,35 @@ namespace M183.BusinessLogic
                     // Is the post existing one?
                     else
                     {
+                        post.Title = postViewModel.Title;
+                        post.EditedOn = DateTime.Now;
+                        post.Content = postViewModel.Content;
+                        post.Description = postViewModel.Description;
+                        
+                        if (post.PostStatuses.OrderByDescending(ps => ps.Timestamp).FirstOrDefault().Status == (int)PostStatusCode.Published &&
+                                !postViewModel.IsPublished)
+                        {
+                            PostStatus postStatus = new PostStatus()
+                            {
+                                Post = post,
+                                Status = (int)PostStatusCode.Saved,
+                                Timestamp = DateTime.Now,
+                            };
+                            post.PostStatuses.Add(postStatus);
+                        }
+                        else if (post.PostStatuses.OrderByDescending(ps => ps.Timestamp).FirstOrDefault().Status != (int)PostStatusCode.Published &&
+                                postViewModel.IsPublished)
+                        {
+                            PostStatus postStatus = new PostStatus()
+                            {
+                                Post = post,
+                                Status = (int)PostStatusCode.Published,
+                                Timestamp = DateTime.Now,
+                            };
+                            post.PostStatuses.Add(postStatus);
+                        }
 
+                        db.SaveChanges();
                     }
                 }
             }
