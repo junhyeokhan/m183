@@ -37,7 +37,7 @@ namespace M183.UI.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-
+        
         [HttpGet]
         public ActionResult PostDetail(int postId)
         {

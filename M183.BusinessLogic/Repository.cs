@@ -333,7 +333,7 @@ namespace M183.BusinessLogic
             PostViewModel postViewModel = new PostViewModel();
             using (DatabaseContext db = new DatabaseContext())
             {
-                Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
+                Post post = db.Post.Where(p => p.Id == postId && p.DeletedOn == null).FirstOrDefault();
                 if (post != null)
                 {
                     postViewModel.Id = post.Id;
@@ -342,9 +342,9 @@ namespace M183.BusinessLogic
                     postViewModel.CreatedOn = post.CreatedOn;
                     postViewModel.EditedOn = post.EditedOn;
                     postViewModel.Content = post.Content;
+                    postViewModel.Comments = GetComments(postViewModel.Id);
                 }
             }
-            postViewModel.Comments = GetComments(postViewModel.Id);
             return postViewModel;
         }
         public List<CommentViewModel> GetComments(int postId)

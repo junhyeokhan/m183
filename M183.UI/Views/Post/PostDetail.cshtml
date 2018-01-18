@@ -6,35 +6,46 @@
             <button class="back-button pure-button pure-button-primary">< Go Back</button>
         </span>
     </h1>
-@using (Html.BeginForm("AddComment", "Post", new { area = "" }, FormMethod.Post, new { @class = "pure-form" }))
+@if (Model.Id > 0)
+{
+    using (Html.BeginForm("AddComment", "Post", new { area = "" }, FormMethod.Post, new { @class = "pure-form" }))
+    {
+        <div class="block long">
+            @Html.HiddenFor(m => m.Id)
+            <h2>@Html.DisplayFor(m => m.Title) @(Model.DeletedOn != null ? "(Delete on " + Model.DeletedOn + ")" : "")</h2>
+            <p>@Html.DisplayFor(m => m.Content)</p>
+            <p>@Html.DisplayFor(m => m.Description)</p>
+            <p>Written on: @Html.DisplayFor(m => m.CreatedOn)</p>
+            <p>@(Model.EditedOn == null ? "" : "Edited on:" + Html.DisplayFor(m => m.EditedOn))</p>
+        </div>
+
+        <h1 class="title">Comments</h1>
+        <div class="block long">
+            @if (Model.Comments.Count > 0)
+            {
+                foreach (CommentViewModel commentViewModel in Model.Comments)
+                {
+                    @Html.HiddenFor(m => commentViewModel.Id)
+                    <p>@commentViewModel.CreatedOn: @commentViewModel.Text</p>
+                }
+            }
+            else
+            {
+                <p>There is no comment on this post yet.</p>
+            }
+            <span class="error">
+                @Html.ValidationSummary()
+            </span>
+            <textarea name="comment" placeholder="New comment (1 ~ 200 characters)" maxlength="200"></textarea>
+            <input type="submit" name="submit" value="Submit" class="pure-button pure-button-primary" />
+        </div>
+    }
+}
+else
 {
     <div class="block long">
-        @Html.HiddenFor(m => m.Id)
-        <h2>@Html.DisplayFor(m => m.Title) @(Model.DeletedOn != null ? "(Delete on " + Model.DeletedOn + ")" : "")</h2>
-        <p>@Html.DisplayFor(m => m.Content)</p>
-        <p>@Html.DisplayFor(m => m.Description)</p>
-        <p>Written on: @Html.DisplayFor(m => m.CreatedOn)</p>
-        <p>@(Model.EditedOn == null ? "" : "Edited on:" + Html.DisplayFor(m => m.EditedOn))</p>
-    </div>
-
-    <h1 class="title">Comments</h1>
-    <div class="block long">
-        @if (Model.Comments.Count > 0)
-        {
-            foreach (CommentViewModel commentViewModel in Model.Comments)
-            {
-                @Html.HiddenFor(m => commentViewModel.Id)
-                <p>@commentViewModel.CreatedOn: @commentViewModel.Text</p>
-            }
-        }
-        else
-        {
-            <p>There is no comment on this post yet.</p>
-        }
         <span class="error">
-            @Html.ValidationSummary()
+            No post found
         </span>
-        <textarea name="comment" placeholder="New comment (1 ~ 200 characters)" maxlength="200"></textarea>
-        <input type="submit" name="submit" value="Submit" class="pure-button pure-button-primary" />
     </div>
 }
