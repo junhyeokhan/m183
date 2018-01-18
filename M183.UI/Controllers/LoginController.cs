@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
+using System.Linq;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
+using System.Net.Mail;
 using M183.BusinessLogic;
 using M183.BusinessLogic.Models;
 using M183.BusinessLogic.ViewModels;
-using System.Net.Mail;
 
 namespace M183.UI.Controllers
 {
     public class LoginController : Controller
     {
         private static Repository repository = new Repository();
-
-        // GET: Login
+        
         public ActionResult Index()
         {
             return View();
@@ -144,7 +141,6 @@ namespace M183.UI.Controllers
             }
             return View("Login", loginViewModel);
         }
-    }
 
         public ActionResult Logout()
         {

@@ -24,9 +24,15 @@ namespace M183.BusinessLogic
             using (DatabaseContext db = new DatabaseContext())
             {
                 // Check if there is any user with same username
-                User user = db.User
-                           .Where(u => u.UserName == registerViewModel.Username)
-                           .FirstOrDefault();
+                User user = null;
+
+                foreach (User savedUser in db.User)
+                {
+                    if (PBKDF2Hash.Validate(savedUser.UserName, savedUser.UserName))
+                    {
+                        user = savedUser;
+                    }
+                }
                 
                 // User with same username already exists
                 if (user != null)
@@ -39,8 +45,8 @@ namespace M183.BusinessLogic
                     // Create new user with submitted data
                     user = new User()
                     {
-                        UserName = registerViewModel.Username,
-                        Password = registerViewModel.Password,
+                        UserName = PBKDF2Hash.Hash(registerViewModel.Username),
+                        Password = PBKDF2Hash.Hash(registerViewModel.Password),
                         MobileNumber = registerViewModel.MobileNumber,
                         AuthenticationMode = (int)registerViewModel.AuthenticationMethod,
                         EmailAddress = registerViewModel.EmailAddress,
@@ -93,7 +99,16 @@ namespace M183.BusinessLogic
             bool isAuthenticated = false;
             using (DatabaseContext db = new DatabaseContext())
             {
-                User user = db.User.Where(u => u.UserName == loginViewModel.Username).FirstOrDefault();
+                User user = null;
+
+                foreach (User savedUser in db.User)
+                {
+                    if (PBKDF2Hash.Validate(user.UserName, savedUser.UserName))
+                    {
+                        user = savedUser;
+                    }
+                }
+
                 if (user != null)
                 {
                     UserStatus userStatus = user.UserStatues?.Where(us => us.DeletedOn == null).OrderByDescending(us => us.CreatedOn).FirstOrDefault();
@@ -122,7 +137,7 @@ namespace M183.BusinessLogic
 
                 if (!BusinessUser.Current.IsBlocked)
                 {
-                    if (loginViewModel.Password == user.Password)
+                    if (PBKDF2Hash.Validate(loginViewModel.Password, user.Password))
                     {
                         BusinessUser.Current.Id = user.Id;
                         BusinessUser.Current.Username = user.UserName;
