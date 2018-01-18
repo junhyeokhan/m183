@@ -103,7 +103,7 @@ namespace M183.BusinessLogic
 
                 foreach (User savedUser in db.User)
                 {
-                    if (PBKDF2Hash.Validate(user.UserName, savedUser.UserName))
+                    if (PBKDF2Hash.Validate(loginViewModel.Username, savedUser.UserName))
                     {
                         user = savedUser;
                     }
