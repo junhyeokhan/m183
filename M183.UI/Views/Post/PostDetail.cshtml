@@ -1,13 +1,13 @@
 ﻿@model PostViewModel
 
-@using (Html.BeginForm("AddComment", "Post", new { area = "" }, FormMethod.Post, new { @class = "pure-form" }))
-{
     <h1 class="title">
         Post
         <span class="control">
-            <a class="back-button">< Go Back</a>
+            <button class="back-button pure-button pure-button-primary">< Go Back</button>
         </span>
     </h1>
+@using (Html.BeginForm("AddComment", "Post", new { area = "" }, FormMethod.Post, new { @class = "pure-form" }))
+{
     <div class="block long">
         @Html.HiddenFor(m => m.Id)
         <h2>@Html.DisplayFor(m => m.Title) @(Model.DeletedOn != null ? "(Delete on " + Model.DeletedOn + ")" : "")</h2>

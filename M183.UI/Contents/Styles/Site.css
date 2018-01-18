@@ -39,25 +39,25 @@ body {
         background-color: white;
     }
 
-    .navigation ul li {
-        float: left;
-    }
-
-    .navigation ul li.control{
-        float: right;
-    }
-
-        .navigation ul li a {
-            display: block;
-            color: black;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
+        .navigation ul li {
+            float: left;
         }
 
-            .navigation ul li a:hover {
-                background-color: #E6E6E6;
+            .navigation ul li.control {
+                float: right;
             }
+
+            .navigation ul li a {
+                display: block;
+                color: black;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+                .navigation ul li a:hover {
+                    background-color: #E6E6E6;
+                }
 
             .navigation ul li.selected a {
                 background-color: #808080;
@@ -93,19 +93,25 @@ body {
         float: right;
     }
 
-    .block .title .control a {
-        font-weight: normal;
-        font-size: 50%;
-    }
+        .block .title .control a {
+            font-weight: normal;
+            font-size: 50%;
+        }
 
 .title .control {
     float: right;
 }
 
-.title .control a {
-    font-size: 50%;
-    font-weight: normal;
-}
+    .title .control a {
+        font-size: 50%;
+        font-weight: normal;
+    }
+
+    .title .control button {
+        font-size: 50%;
+        font-weight: normal;
+    }
+
     .title .control input {
         font-size: 50%;
         font-weight: normal;

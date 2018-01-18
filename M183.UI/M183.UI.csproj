@@ -89,8 +89,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Contents\Scripts\Site.js" />
     <Content Include="Contents\Styles\Site.css" />
     <Content Include="Global.asax" />
+    <None Include="Contents\Scripts\jquery-3.2.1.intellisense.js" />
+    <Content Include="Contents\Scripts\jquery-3.2.1.js" />
+    <Content Include="Contents\Scripts\jquery-3.2.1.min.js" />
+    <Content Include="Contents\Scripts\jquery-3.2.1.slim.js" />
+    <Content Include="Contents\Scripts\jquery-3.2.1.slim.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +138,8 @@
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Post\_Post.cshtml" />
     <Content Include="Views\Post\PostDetail.cshtml" />
+    <Content Include="Contents\Scripts\jquery-3.2.1.slim.min.map" />
+    <Content Include="Contents\Scripts\jquery-3.2.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
