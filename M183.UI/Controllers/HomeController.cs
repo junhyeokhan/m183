@@ -11,5 +11,10 @@ namespace M183.UI.Controllers
             // Get all published posts and show them to user
             return View(new Repository().GetAllPosts("", false, false));
         }
+
+        public ActionResult ApiTest()
+        {
+            return View();
+        }
     }
 }

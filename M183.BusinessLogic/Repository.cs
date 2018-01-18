@@ -6,6 +6,7 @@ using M183.BusinessLogic.ViewModels;
 using System.Collections.Generic;
 using System.Web.SessionState;
 using System.Runtime.Remoting.Contexts;
+using M183.UI.BusinessLogic.Models;
 
 namespace M183.BusinessLogic
 {
@@ -449,6 +450,46 @@ namespace M183.BusinessLogic
                     db.Comment.Add(comment);
                     db.SaveChanges();
                 }
+            }
+        }
+
+        public IEnumerable<DtoPost> GetAllDtoPosts()
+        {
+            IEnumerable<DtoPost> dtoPosts = new List<DtoPost>();
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                List<Post> posts = db.Post
+                    .Where(p => p.DeletedOn == null && 
+                        p.PostStatuses
+                            .OrderByDescending(ps => ps.Timestamp)
+                            .FirstOrDefault().Status == (int)PostStatusCode.Published)
+                    .ToList();
+                dtoPosts = posts
+                    .Select(p => new DtoPost()
+                    {
+                        Title = p.Title,
+                        Description = p.Description,
+                        Content = p.Content,
+                        Comments = p.Comments.Select(c => c.Text).ToArray()
+                    })
+                    .ToList();
+            }
+            return dtoPosts;
+        }
+
+        public DtoPost GetDtoPost(int postId)
+        {
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                Post post = db.Post
+                    .Where(p => p.Id == postId &&
+                        p.DeletedOn == null &&
+                        p.PostStatuses
+                            .OrderByDescending(ps => ps.Timestamp)
+                            .FirstOrDefault().Status == (int)PostStatusCode.Published)
+                    .FirstOrDefault();
+
+                return post == null ? null : new DtoPost() { Title = post.Title, Comments = post.Comments.Select(c => c.Text).ToArray(), Content = post.Content, Description = post.Description };
             }
         }
     }

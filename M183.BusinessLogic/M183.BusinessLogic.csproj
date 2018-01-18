@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Models\AuthenticationMethod.cs" />
     <Compile Include="Models\BusinessUser.cs" />
+    <Compile Include="Models\DtoPost.cs" />
     <Compile Include="Models\LogClass.cs" />
     <Compile Include="Models\PostStatusCode.cs" />
     <Compile Include="Models\Role.cs" />
