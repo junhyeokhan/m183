@@ -108,19 +108,31 @@ namespace M183.UI.Controllers
 
                 repository.VerifyToken(BusinessUser.Current.Id, loginViewModel.Token, ipAddress.ToString());
 
-                // Is user verified with the code?
-                if (BusinessUser.Current.IsAuthenticated)
+                if (BusinessUser.Current.IsBlocked)
                 {
-                    // Redirect to dashboard according to the role
-                    if (BusinessUser.Current.Roles.Contains(Role.Admin))
-                    {
-                        return RedirectToAction("Index", "Dashboard", new { area = "admin" });
-                    }
-                    else if (BusinessUser.Current.Roles.Contains(Role.User))
-                    {
-                        return RedirectToAction("Index", "Dashboard", new { area = "user" });
-                    }
+                    ModelState.AddModelError("Login", "User account is blocked.");
                 }
+                else
+                {
+                    // Is user verified with the code?
+                    if (BusinessUser.Current.IsAuthenticated)
+                    {
+                        // Redirect to dashboard according to the role
+                        if (BusinessUser.Current.Roles.Contains(Role.Admin))
+                        {
+                            return RedirectToAction("Index", "Dashboard", new { area = "admin" });
+                        }
+                        else if (BusinessUser.Current.Roles.Contains(Role.User))
+                        {
+                            return RedirectToAction("Index", "Dashboard", new { area = "user" });
+                        }
+                    }
+                    else
+                    {
+                        // Otherwise add error message
+                        ModelState.AddModelError("Login", "Entered token does not correspond original code.");
+                    }
+                }  
             }
             catch (Exception ex)
             {
@@ -129,12 +141,10 @@ namespace M183.UI.Controllers
             }
             finally
             {
-                // Otherwise add error message
-                ModelState.AddModelError("Login", "Entered token does not correspond original code.");
             }
-
             return View("Login", loginViewModel);
         }
+    }
 
         public ActionResult Logout()
         {
