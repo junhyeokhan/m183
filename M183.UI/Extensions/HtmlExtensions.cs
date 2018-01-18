@@ -13,7 +13,7 @@ namespace M183.UI.Extensions
         public static MvcHtmlString ActionMenuItem(this HtmlHelper htmlHelper, String linkText, String actionName, String controllerName, String htmlClass, String area)
         {
             var tag = new TagBuilder("li");
-            if (htmlHelper.ViewContext.RequestContext.IsCurrentRoute(null, controllerName, actionName))
+            if (htmlHelper.ViewContext.RequestContext.IsCurrentRoute(area, controllerName, actionName))
             {
                 tag.AddCssClass("selected");
             }

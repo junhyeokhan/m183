@@ -45,9 +45,19 @@ namespace M183.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddComment(int Id, string comment)
+        public ActionResult AddComment(PostViewModel postViewModel, int Id, string comment)
         {
-            new Repository().AddComment(Id, comment);
+            Repository repository = new Repository();
+            // Validate length (Controller level)
+            if (comment.Length > 200 || comment.Length < 1)
+            {
+                ModelState.AddModelError("Comment", "Comment must be 1~200 characters long.");
+                postViewModel.Comments = repository.GetComments(Id);
+                return View("PostDetail", postViewModel);
+            }
+
+            // SQL Injection Prevention is done by LINQ and Entity Framework. Reference: https://stackoverflow.com/a/9079496
+            repository.AddComment(Id, comment);
             return RedirectToAction("PostDetail", new { postId = Id });
         }
     }

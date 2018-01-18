@@ -130,8 +130,8 @@
     <Content Include="Views\Register\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
-    <Content Include="Views\Shared\_Post.cshtml" />
-    <Content Include="Views\Shared\PostDetail.cshtml" />
+    <Content Include="Views\Post\_Post.cshtml" />
+    <Content Include="Views\Post\PostDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

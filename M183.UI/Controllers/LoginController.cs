@@ -37,7 +37,7 @@ namespace M183.UI.Controllers
                 {
                     try
                     {
-                        string code = new Random().Next(999999).ToString();
+                        string code = new Random().Next(100000, 999999).ToString();
                         switch (BusinessUser.Current.AuthenticationMethod)
                         {
                             case AuthenticationMethod.SMS:
@@ -111,7 +111,15 @@ namespace M183.UI.Controllers
                 // Is user verified with the code?
                 if (BusinessUser.Current.IsAuthenticated)
                 {
-                    return RedirectToAction("Index", "Home");
+                    // Redirect to dashboard according to the role
+                    if (BusinessUser.Current.Roles.Contains(Role.Admin))
+                    {
+                        return RedirectToAction("Index", "Dashboard", new { area = "admin" });
+                    }
+                    else if (BusinessUser.Current.Roles.Contains(Role.User))
+                    {
+                        return RedirectToAction("Index", "Dashboard", new { area = "user" });
+                    }
                 }
             }
             catch (Exception ex)

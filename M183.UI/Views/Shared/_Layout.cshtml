@@ -21,6 +21,8 @@
 
             @if (BusinessUser.Current.IsAuthenticated)
             {
+                @Html.ActionMenuItem("User", "Index", "Dashboard", "", "User")
+                @Html.ActionMenuItem("Admin", "Index", "Dashboard", "", "Admin")
                 @Html.ActionMenuItem("Logout", "Logout", "Login", "control", "")
             }
             else

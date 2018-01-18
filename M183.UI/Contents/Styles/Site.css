@@ -1,6 +1,6 @@
 ﻿/*
     Colors:
-        Red: #ca3c3c
+        Red: #CA3C3C
         Blue: #0078e7
         Green:
         Yellow:
@@ -118,4 +118,8 @@ body {
 .pure-button.pure-button-error {
     background-color: #CA3C3C;
     color: white;
+}
+
+.error {
+    color: #CA3C3C;
 }

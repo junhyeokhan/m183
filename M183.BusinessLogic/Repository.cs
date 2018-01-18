@@ -277,14 +277,6 @@ namespace M183.BusinessLogic
             }
         }
 
-        public User GetUser(int userId)
-        {
-            using (DatabaseContext db = new DatabaseContext())
-            {
-                return db.User.Where(u => u.Id == userId).FirstOrDefault();
-            }
-        }
-
         public List<PostViewModel> GetAllPosts(string query, bool onlyPublished, bool alsoDeleted)
         {
             using (DatabaseContext db = new DatabaseContext())
@@ -350,7 +342,21 @@ namespace M183.BusinessLogic
                     postViewModel.CreatedOn = post.CreatedOn;
                     postViewModel.EditedOn = post.EditedOn;
                     postViewModel.Content = post.Content;
-                    postViewModel.Comments = post.Comments
+                }
+            }
+            postViewModel.Comments = GetComments(postViewModel.Id);
+            return postViewModel;
+        }
+        public List<CommentViewModel> GetComments(int postId)
+        {
+            List<CommentViewModel> comments = new List<CommentViewModel>();
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                Post post = db.Post.Where(p => p.Id == postId).FirstOrDefault();
+
+                if (post != null)
+                {
+                    comments = post.Comments
                             .Select(c => new CommentViewModel()
                             {
                                 Id = c.Id,
@@ -360,16 +366,16 @@ namespace M183.BusinessLogic
                             .ToList();
                 }
             }
-            return postViewModel;
+            return comments;
         }
         public void SavePost(PostViewModel postViewModel)
         {
-            // Check if user is logged in
-            User user = GetUser(BusinessUser.Current.Id);
-
-            if (user != null)
+            using (DatabaseContext db = new DatabaseContext())
             {
-                using (DatabaseContext db = new DatabaseContext())
+                // Check if user is logged in
+                User user = db.User.Where(u => u.Id == BusinessUser.Current.Id).FirstOrDefault();
+
+                if (user != null)
                 {
                     // Check if the post exists already
                     Post post = db.Post.Where(p => p.Id == postViewModel.Id).FirstOrDefault();
@@ -388,7 +394,7 @@ namespace M183.BusinessLogic
                             Content = postViewModel.Content,
                             Description = postViewModel.Description,
                         };
-                        db.Post.Add(post);
+                        user.Posts.Add(post);
 
                         // Add initial post status
                         PostStatus postStatus = new PostStatus()

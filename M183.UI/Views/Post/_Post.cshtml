@@ -14,7 +14,7 @@
         <p>Written on: @Model.CreatedOn</p>
         <p>@(Model.EditedOn == null ? "" : "Edited on:" + Model.EditedOn)</p>
 
-        @if (BusinessUser.Current.IsAuthorisedToPost(Model.Id))
+        @if (BusinessUser.Current.IsAuthorisedToPost(Model.Id) && Model.DeletedOn == null)
         {
             @Html.ActionLink("Edit", "EditPost", "Post", new { area = "" }, new { @class = "pure-button pure-button-primary space-right" })
             @Html.ActionLink("Delete", "DeletePost", "Post", new { area = "", postId = Model.Id }, new { @class = "pure-button pure-button-error" })
