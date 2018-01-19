@@ -61,6 +61,9 @@ namespace M183.UI.Controllers
         public ActionResult PostDetail(string postId)
         {
             int realId = repository.GetPostId(postId);
+
+            ViewBag.PostId = postId;
+
             return View(repository.GetPostDetail(realId));
         }
 

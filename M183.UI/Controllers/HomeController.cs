@@ -9,7 +9,7 @@ namespace M183.UI.Controllers
         public ActionResult Index()
         {
             // Get all published posts and show them to user
-            return View(new Repository().GetAllPosts("", false, false));
+            return View(new Repository().GetAllPosts("", true, false));
         }
 
         /* Answers for the questions

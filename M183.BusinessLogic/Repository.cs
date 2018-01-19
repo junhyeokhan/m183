@@ -352,13 +352,19 @@ namespace M183.BusinessLogic
                 Post post = db.Post.Where(p => p.Id == postId && p.DeletedOn == null).FirstOrDefault();
                 if (post != null)
                 {
-                    postViewModel.Id = post.Id;
                     postViewModel.Title = post.Title;
                     postViewModel.Description = post.Description;
                     postViewModel.CreatedOn = post.CreatedOn;
                     postViewModel.EditedOn = post.EditedOn;
                     postViewModel.Content = post.Content;
-                    postViewModel.Comments = GetComments(postViewModel.Id);
+                    postViewModel.Comments = post.Comments
+                            .Select(c => new CommentViewModel()
+                            {
+                                Id = c.Id,
+                                CreatedOn = c.CreatedOn,
+                                Text = c.Text
+                            })
+                            .ToList();
                     postViewModel.IsPublished = post.PostStatuses.OrderByDescending(ps => ps.Timestamp).FirstOrDefault().Status == (int)PostStatusCode.Published;
                 }
             }
